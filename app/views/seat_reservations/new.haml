@@ -1,0 +1,6 @@
+%h1 Choose the seat
+
+.container
+  = simple_form_for :seat, url: reserve_seat_reservation_url do |f|
+    = f.input :number
+    = f.button :submit, class: 'btn btn-success'
