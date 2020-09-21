@@ -1,0 +1,5 @@
+%h1 Confirm your reservation (agreed you've paid it)
+
+.container
+  = simple_form_for :payment, url: payment_done_seat_reservation_url(reservation_id: @seat_reservation.id) do |f|
+    = f.button :submit, 'Confirm', class: 'btn btn-success'
