@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe SeatReservation do
@@ -16,8 +14,8 @@ RSpec.describe SeatReservation do
   context '#reserve' do
     subject { described_class.new(id).reserve }
 
-    it 'publishes the SeatReserved event' do
-      expect { subject }.to publish_event(SeatReservation::Events::SeatReserved)
+    it 'publishes the Reserved event' do
+      expect { subject }.to publish_event(SeatReservation::Events::Reserved)
     end
   end
 

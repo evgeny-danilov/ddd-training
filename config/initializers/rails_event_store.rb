@@ -12,6 +12,10 @@ Rails.configuration.to_prepare do
     config.default_event_store = Rails.configuration.event_store
   end
 
+  Rails.configuration.event_store.tap do |store|
+    store.subscribe(SeatReservation::ReadModel.new, to: [SeatReservation::Events::PassengerDataEntered])
+  end
+
   # Subscribe event handlers below
   # Rails.configuration.event_store.tap do |store|
   #   store.subscribe(InvoiceReadModel.new, to: [InvoicePrinted])

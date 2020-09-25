@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'seat_reservation/events'
+require_relative 'seat_reservation/read_model'
 
 class SeatReservation
   include AggregateRoot
@@ -19,31 +20,27 @@ class SeatReservation
   end
 
   def reserve
-    load_resource(id) do |resource|
-      raise InvalidTransaction unless resource.state == :initialized
+    raise InvalidTransaction unless resource.state == :initialized
 
-      apply_event Events::SeatReserved.new(data: { expired_at: Time.now + 3.hour })
-    end
+    apply_event Events::Reserved.new(data: { expired_at: Time.now + 3.hour })
   end
 
   def create_passenger(params:)
-    load_resource(id) do |resource|
-      raise InvalidTransaction unless resource.state == :reserved
+    raise InvalidTransaction unless resource.state == :reserved
 
-      Actions::CreatePassenger.new(stream_name: stream_name, params: params[:passenger]).call
-      apply_event Events::PassengerDataEntered.new(data: {})
-    end
+    apply_event Events::PassengerDataEntered.new(data: {
+      stream_name: stream_name, 
+      params: params
+    })
   end
 
   def paid
-    load_resource(id) do |resource|
-      raise InvalidTransaction unless resource.state == :passenger_created
+    raise InvalidTransaction unless resource.state == :passenger_created
 
-      apply_event Events::SeatPaid.new(data: {})
-    end
+    apply_event Events::SeatPaid.new(data: {})
   end
 
-  on Events::SeatReserved do |_event|
+  on Events::Reserved do |_event|
     @state = :reserved
   end
 
@@ -61,12 +58,15 @@ class SeatReservation
 
   private
 
-  def load_resource(id, &block)
-    Repository.new.with_id(id, &block)
+  def resource
+    return @resource if defined?(@resource)
+
+    Repository.new.with_id(id) { return @resource = _1 }
   end
 
   def apply_event(event)
     event_store.publish(event, stream_name: stream_name)
+    event
   end
 
   def stream_name

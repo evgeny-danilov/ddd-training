@@ -10,11 +10,17 @@ class SeatReservation
 
       def call
         Entities::Passenger.create(form.attributes)
+        passenger_created
       end
 
       private
 
       attr_reader :form, :stream_name
+
+      def passenger_created
+        event = Events::PassengerCreated.new(data: {})
+        Rails.configuration.event_store.publish(event, stream_name: stream_name)
+      end
     end
   end
 end
