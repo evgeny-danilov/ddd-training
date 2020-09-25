@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get :new
     post :reserve
     get :user_input
-    post :payment_pending
+    post :create_passenger
     get :payment_confirm
     post :payment_done
     get :congratulate

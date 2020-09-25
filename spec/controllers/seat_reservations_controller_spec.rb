@@ -46,4 +46,15 @@ RSpec.describe SeatReservationsController, type: :controller do
     end
   end
 
+  context 'POST #create_passenger' do
+    let(:reservation_id) { 123 }
+
+    before { SeatReservation.new(reservation_id).reserve }
+
+    it 'shows user_input page' do
+      post :create_passenger, params: { reservation_id: reservation_id, passenger: { first_name: 'Gold', last_name: 'Man' } }
+      expect(response).to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
+    end
+  end
+
 end

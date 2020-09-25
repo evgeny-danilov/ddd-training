@@ -19,21 +19,23 @@ class SeatReservation
   def reserve
     load_resource(id) do |resource|
       raise InvalidTransaction unless resource.state == :initialized
-      apply_event Events::SeatReserved.new(data: { id: id, expired_at: Time.now + 3.hour })
+      apply_event Events::SeatReserved.new(data: { expired_at: Time.now + 3.hour })
     end
   end
 
-  def payment_pending
+  def create_passenger(params:)
     load_resource(id) do |resource|
       raise InvalidTransaction unless resource.state == :reserved
-      apply_event Events::SeatPaymentPending.new(data: { id: id})
+      
+      Actions::CreatePassenger.new(stream_name: stream_name, params: params[:passenger]).call
+      apply_event Events::PassengerDataEntered.new(data: {})
     end
   end
 
   def paid
     load_resource(id) do |resource|
-      raise InvalidTransaction unless resource.state == :payment_pending
-      apply_event Events::SeatPaid.new(data: { id: id})
+      raise InvalidTransaction unless resource.state == :passenger_created
+      apply_event Events::SeatPaid.new(data: {})
     end
   end
 
@@ -41,8 +43,12 @@ class SeatReservation
     @state = :reserved
   end
 
-  on Events::SeatPaymentPending do |event|
-    @state = :payment_pending
+  on Events::PassengerDataEntered do |event|
+    @state = :passenger_data_entered
+  end
+
+  on Events::PassengerCreated do |event|
+    @state = :passenger_created
   end
 
   on Events::SeatPaid do |event|
@@ -56,12 +62,15 @@ class SeatReservation
   end
 
   def apply_event(event)
-    event_store.publish(event, stream_name: "SeatReservation$#{event.data[:id]}")
+    event_store.publish(event, stream_name: stream_name)
+  end
+
+  def stream_name
+    "SeatReservation$#{id}"
   end
 
   def event_store
-    RailsEventStore::Client.new
+    Rails.configuration.event_store
   end
-
 
 end

@@ -17,6 +17,10 @@ gem 'bootstrap', '~> 5.0.0.alpha1'
 gem 'jquery-rails'
 gem 'awesome_print'
 
+gem 'dry-struct'
+gem 'dry-types'
+gem 'dry-validation'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

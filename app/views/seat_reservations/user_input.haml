@@ -1,7 +1,7 @@
 %h1 Enter you personal data
 
 .container
-  = simple_form_for :passenger, url: payment_pending_seat_reservation_url(reservation_id: @seat_reservation.id) do |f|
+  = simple_form_for :passenger, url: create_passenger_seat_reservation_url(reservation_id: @seat_reservation.id) do |f|
     = f.input :first_name
     = f.input :last_name
     = f.button :submit, class: 'btn btn-success'

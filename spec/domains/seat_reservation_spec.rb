@@ -5,29 +5,29 @@ RSpec.describe SeatReservation do
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
 
-  # context 'when #reserve action called' do
-  #   subject { described_class.new.reserve }
+  def publish_event(event_class)
+    publish(an_event(event_class))
+      .in(event_store)
+      .in_stream(event_stream)
+  end
 
-  #   it 'creates an event without publishing' do
-  #     expect(subject).to contain_exactly(SeatReservation::Events::SeatReserved)
-  #   end
-  # end
-
-  context 'when #reserve action called' do
+  context '#reserve' do
     subject { described_class.new(id).reserve }
 
-    it 'publishing an event SeatReserved' do
-      expect { subject }.to publish(
-        an_event(SeatReservation::Events::SeatReserved)
-      ).in(event_store).in_stream(event_stream)
+    it 'publishes the SeatReserved event' do
+      expect { subject }.to publish_event(SeatReservation::Events::SeatReserved)
     end
   end
 
-  context 'when #payment_pending action called' do
-    subject { described_class.new(id).payment_pending }
+  context '#create_passenger' do
+    subject { described_class.new(id).create_passenger(params: params) }
 
-    it 'publishing an event SeatPaymentPending' do
-      expect { subject }.to raise_error(SeatReservation::InvalidTransaction)
+    let(:params) { { passenger: { first_name: "Gold", last_name: "Man" } } }
+
+    context 'when seat has not been reserved' do
+      it 'raises an error' do
+        expect { subject }.to raise_error(SeatReservation::InvalidTransaction)
+      end
     end
 
     context 'when seat was reserved before' do
@@ -35,10 +35,16 @@ RSpec.describe SeatReservation do
         described_class.new(id).reserve
       end
 
-      it 'publishing an event SeatPaymentPending' do
-        expect { subject }.to publish(
-          an_event(SeatReservation::Events::SeatPaymentPending)
-        ).in(event_store).in_stream(event_stream)
+      it 'publishes the PassengerDataEntered event' do
+        expect { 
+          subject 
+        }.to change(SeatReservation::Entities::Passenger, :count).by(1)
+        .and publish_event(SeatReservation::Events::PassengerDataEntered)
+
+        expect(SeatReservation::Entities::Passenger.last).to have_attributes(
+          first_name: "Gold", 
+          last_name: "Man"
+        )
       end
     end
   end
