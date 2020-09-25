@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'seat_reservation/events'
 
 class SeatReservation
@@ -19,6 +21,7 @@ class SeatReservation
   def reserve
     load_resource(id) do |resource|
       raise InvalidTransaction unless resource.state == :initialized
+
       apply_event Events::SeatReserved.new(data: { expired_at: Time.now + 3.hour })
     end
   end
@@ -26,7 +29,7 @@ class SeatReservation
   def create_passenger(params:)
     load_resource(id) do |resource|
       raise InvalidTransaction unless resource.state == :reserved
-      
+
       Actions::CreatePassenger.new(stream_name: stream_name, params: params[:passenger]).call
       apply_event Events::PassengerDataEntered.new(data: {})
     end
@@ -35,23 +38,24 @@ class SeatReservation
   def paid
     load_resource(id) do |resource|
       raise InvalidTransaction unless resource.state == :passenger_created
+
       apply_event Events::SeatPaid.new(data: {})
     end
   end
 
-  on Events::SeatReserved do |event|
+  on Events::SeatReserved do |_event|
     @state = :reserved
   end
 
-  on Events::PassengerDataEntered do |event|
+  on Events::PassengerDataEntered do |_event|
     @state = :passenger_data_entered
   end
 
-  on Events::PassengerCreated do |event|
+  on Events::PassengerCreated do |_event|
     @state = :passenger_created
   end
 
-  on Events::SeatPaid do |event|
+  on Events::SeatPaid do |_event|
     @state = :paid
   end
 
@@ -72,5 +76,4 @@ class SeatReservation
   def event_store
     Rails.configuration.event_store
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SeatReservation
   module Forms
     module Types

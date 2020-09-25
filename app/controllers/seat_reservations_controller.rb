@@ -1,5 +1,6 @@
-class SeatReservationsController < ApplicationController
+# frozen_string_literal: true
 
+class SeatReservationsController < ApplicationController
   # GET /new
   def new
     @seat_reservation = SeatReservation.new(nil)
@@ -10,7 +11,6 @@ class SeatReservationsController < ApplicationController
     new_reservation_id = SecureRandom.uuid
     aggregate_root(new_reservation_id).reserve
     redirect_to user_input_seat_reservation_url(reservation_id: new_reservation_id)
-
   rescue SeatReservation::InvalidTransaction
     render :new, alert: 'Ups, something goes wrong'
   end
@@ -57,5 +57,4 @@ class SeatReservationsController < ApplicationController
   def aggregate_root(id)
     SeatReservation.new(id)
   end
-
 end

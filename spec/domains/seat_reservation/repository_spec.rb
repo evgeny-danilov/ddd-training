@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe SeatReservation::Repository do
   let(:object_id) { 123 }
@@ -6,7 +8,7 @@ RSpec.describe SeatReservation::Repository do
   let(:event_store) { Rails.configuration.event_store }
 
   def store_event(event_name)
-    described_class.new.with_id(object_id) do |item| 
+    described_class.new.with_id(object_id) do |item|
       item.public_send(event_name)
     end
   end

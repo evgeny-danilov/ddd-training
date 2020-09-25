@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SeatReservation
   module Events
     class SeatReserved          < RailsEventStore::Event; end

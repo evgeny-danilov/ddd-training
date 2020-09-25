@@ -1,7 +1,8 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe SeatReservationsController, type: :controller do
-  
   context 'GET #new' do
     render_views
 
@@ -13,7 +14,7 @@ RSpec.describe SeatReservationsController, type: :controller do
 
   context 'POST #reserve' do
     let(:reservation_id) { 123 }
-    
+
     before do
       expect(SecureRandom).to receive(:uuid).and_return(reservation_id).twice
     end
@@ -52,9 +53,12 @@ RSpec.describe SeatReservationsController, type: :controller do
     before { SeatReservation.new(reservation_id).reserve }
 
     it 'shows user_input page' do
-      post :create_passenger, params: { reservation_id: reservation_id, passenger: { first_name: 'Gold', last_name: 'Man' } }
+      post :create_passenger, params: {
+        reservation_id: reservation_id,
+        passenger: { first_name: 'Gold', last_name: 'Man' }
+      }
+
       expect(response).to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
     end
   end
-
 end

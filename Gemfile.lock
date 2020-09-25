@@ -64,6 +64,7 @@ GEM
       ruby_event_store (= 1.1.1)
     arkency-command_bus (0.4.0)
       thread_safe
+    ast (2.4.1)
     autoprefixer-rails (9.8.6.3)
       execjs
     awesome_print (1.8.0)
@@ -194,6 +195,9 @@ GEM
       mini_portile2 (~> 2.4.0)
     nokogiri (1.10.10-x86-mingw32)
       mini_portile2 (~> 2.4.0)
+    parallel (1.19.2)
+    parser (2.7.1.5)
+      ast (~> 2.4.1)
     popper_js (1.16.0)
     public_suffix (4.0.6)
     puma (4.3.6)
@@ -253,11 +257,13 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.20.3, < 2.0)
+    rainbow (3.0.0)
     rake (13.0.1)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (1.7.1)
+    rexml (3.2.4)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -279,6 +285,18 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
+    rubocop (0.92.0)
+      parallel (~> 1.10)
+      parser (>= 2.7.1.5)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.7)
+      rexml
+      rubocop-ast (>= 0.5.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    rubocop-ast (0.5.1)
+      parser (>= 2.7.1.5)
+    ruby-progressbar (1.10.1)
     ruby2_keywords (0.0.2)
     ruby_event_store (1.1.1)
       concurrent-ruby (~> 1.0, >= 1.1.6)
@@ -333,6 +351,7 @@ GEM
       thread_safe (~> 0.1)
     tzinfo-data (1.2020.1)
       tzinfo (>= 1.0.0)
+    unicode-display_width (1.7.0)
     web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -376,6 +395,7 @@ DEPENDENCIES
   rails_event_store
   rails_event_store-rspec
   rspec-rails (~> 4.0.1)
+  rubocop
   sass-rails (>= 6)
   selenium-webdriver
   simple_form

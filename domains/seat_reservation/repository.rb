@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class SeatReservation
   class Repository
-
     def initialize(event_store = Rails.configuration.event_store)
       @repository = AggregateRoot::Repository.new(event_store)
     end
@@ -24,8 +25,7 @@ class SeatReservation
     def stream_name(id)
       raise ArgumentError unless id.class.in? [Integer, String]
 
-      "SeatReservation$#{id}".freeze
+      "SeatReservation$#{id}"
     end
-
   end
 end
