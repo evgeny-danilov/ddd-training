@@ -15,8 +15,8 @@ class SeatReservation
 
   attr_reader :state, :id
 
-  def load
-    Repository.new.load(id)
+  def fetch
+    Repository.new.fetch(id)
   end
 
   def reserve

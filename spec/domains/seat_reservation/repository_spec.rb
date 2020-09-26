@@ -27,7 +27,7 @@ RSpec.describe SeatReservation::Repository do
   end
 
   context 'loading an object from the stream' do
-    subject { described_class.new.load(object_id) }
+    subject { described_class.new.fetch(object_id) }
 
     it 'builds a new SeatReservation object' do
       expect(subject).to have_attributes(state: :initialized)

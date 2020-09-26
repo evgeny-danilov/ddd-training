@@ -47,7 +47,7 @@ class SeatReservationsController < ApplicationController
   private
 
   def load_seat_reservation
-    @seat_reservation = aggregate_root(reservation_id).load
+    @seat_reservation = aggregate_root(reservation_id).fetch
   end
 
   def reservation_id

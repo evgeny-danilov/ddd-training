@@ -10,7 +10,7 @@ class SeatReservation
       repository.with_aggregate(domain_object(id), stream_name(id), &block)
     end
 
-    def load(id)
+    def fetch(id)
       repository.load(domain_object(id), stream_name(id))
     end
 
