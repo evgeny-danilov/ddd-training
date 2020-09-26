@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Publisher
   def self.broadcast(event)
     new(event).broadcast

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Notification
   class ReadModel
     def call(event)
@@ -12,6 +14,5 @@ class Notification
     def passenger_created(payload)
       AdminMailer.passenger_created(payload).deliver_later
     end
-    
   end
 end
