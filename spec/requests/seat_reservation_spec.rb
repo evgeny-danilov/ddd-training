@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Seat Reservation", type: :request do
+RSpec.describe 'Seat Reservation', type: :request do
   context 'GET #new' do
     it 'shows new page' do
       get '/seat_reservation/new'
@@ -28,7 +28,7 @@ RSpec.describe "Seat Reservation", type: :request do
 
       it 'redirects to user_input page' do
         post '/seat_reservation/reserve', params: params
-        expect(response).to render_template :new
+        expect(response).not_to redirect_to(user_input_seat_reservation_url(reservation_id: reservation_id))
       end
     end
   end

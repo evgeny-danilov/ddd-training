@@ -5,8 +5,7 @@ require_relative 'seat_reservation/read_model'
 
 class SeatReservation
   include AggregateRoot
-
-  InvalidTransaction = Class.new(StandardError)
+  include AggregateRootErrors
 
   def initialize(id)
     @state = :initialized

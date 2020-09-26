@@ -28,7 +28,7 @@ RSpec.describe SeatReservation do
 
     context 'when seat has not been reserved' do
       it 'raises an error' do
-        expect { subject }.to raise_error(SeatReservation::InvalidTransaction)
+        expect { subject }.to raise_error(AggregateRootErrors::InvalidTransaction)
       end
     end
 

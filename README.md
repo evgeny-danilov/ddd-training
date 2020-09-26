@@ -16,9 +16,10 @@ Practice DDD technique:
 - **SearReservationController** and view pages
 - **AdminMailer** (dummy)
 
-## Tools
+## Tools & Approaches
 - gem **rails_event_store** (https://railseventstore.org/)
 - **dry.rb** libraries (https://dry-rb.org/)
+- **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
 - add auto-expiration of unpaid reservations

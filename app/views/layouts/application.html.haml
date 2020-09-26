@@ -9,4 +9,6 @@
     = javascript_tag 'application'
 
   %body
+    %p{ 'text-color' => 'red' }= flash[:alert]
+  
     = yield

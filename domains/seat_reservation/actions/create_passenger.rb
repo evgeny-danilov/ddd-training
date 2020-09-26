@@ -9,19 +9,26 @@ class SeatReservation
       end
 
       def call
-        passenger = create_passenger
-        broadcast_event(passenger)
+        validate!
+        broadcast_event(passenger: create_passenger)
       end
 
       private
 
-      attr_reader :form, :stream_id
+      attr_reader :form, :validator, :stream_id
 
-      def create_passenger
-        Entities::Passenger.create(form.attributes)
+      def validate!
+        validator = Validators::PassengerFormValidator.new.call(form.attributes)
+        return if validator.success?
+
+        raise Core::Forms::Error, validator.error_messages
       end
 
-      def broadcast_event(passenger)
+      def create_passenger
+        Entities::Passenger.create!(form.attributes)
+      end
+
+      def broadcast_event(passenger:)
         Publisher.broadcast(
           Events::PassengerCreated.new(data: { stream_id: stream_id, passenger: passenger })
         )

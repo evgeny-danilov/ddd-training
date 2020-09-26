@@ -3,54 +3,53 @@
 class SeatReservationsController < ApplicationController
   # GET /new
   def new
-    @seat_reservation = SeatReservation.new(nil)
+    @seat_reservation = aggregate_root(nil)
   end
 
   # POST /reserve
   def reserve
     new_reservation_id = SecureRandom.uuid
     aggregate_root(new_reservation_id).reserve
+
     redirect_to user_input_seat_reservation_url(reservation_id: new_reservation_id)
-  rescue SeatReservation::InvalidTransaction
-    render :new, alert: 'Ups, something goes wrong'
   end
 
   # GET /user_input
   def user_input
-    load_seat_reservation
+    load_resource
   end
 
   # POST /create_passenger
   def create_passenger
-    aggregate_root(reservation_id).create_passenger(params: params.to_unsafe_h.deep_symbolize_keys)
+    aggregate_root(resource_id).create_passenger(params: params.to_unsafe_h.deep_symbolize_keys)
 
-    redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
+    redirect_to payment_confirm_seat_reservation_url(reservation_id: resource_id)
   end
 
   # GET /payment_confirm
   def payment_confirm
-    load_seat_reservation
+    load_resource
   end
 
   # POST /payment_done
   def payment_done
-    aggregate_root(reservation_id).paid
+    aggregate_root(resource_id).paid
 
-    redirect_to congratulate_seat_reservation_url(reservation_id: reservation_id)
+    redirect_to congratulate_seat_reservation_url(reservation_id: resource_id)
   end
 
   # GET /congratulate
   def congratulate
-    load_seat_reservation
+    load_resource
   end
 
   private
 
-  def load_seat_reservation
-    @seat_reservation = aggregate_root(reservation_id).fetch
+  def load_resource
+    @seat_reservation = aggregate_root(resource_id).fetch
   end
 
-  def reservation_id
+  def resource_id
     params[:reservation_id]
   end
 
