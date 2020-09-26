@@ -33,6 +33,7 @@ RSpec.describe SeatReservation do
     context 'when seat was reserved before' do
       before do
         described_class.new(id).reserve
+        expect(AdminMailer).to receive(:passenger_created).and_return(double('admin_mailer', deliver_later: nil))
       end
 
       it 'publishes events' do

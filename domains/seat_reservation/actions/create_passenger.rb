@@ -9,8 +9,8 @@ class SeatReservation
       end
 
       def call
-        create_passenger
-        broadcast_event
+        passenger = create_passenger
+        broadcast_event(passenger)
       end
 
       private
@@ -21,9 +21,9 @@ class SeatReservation
         Entities::Passenger.create(form.attributes)
       end
 
-      def broadcast_event
+      def broadcast_event(passenger)
         Publisher.broadcast(
-          Events::PassengerCreated.new(data: { stream_id: stream_id})
+          Events::PassengerCreated.new(data: { stream_id: stream_id, passenger: passenger })
         )
       end
     end

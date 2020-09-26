@@ -14,6 +14,7 @@ Rails.configuration.to_prepare do
 
   Rails.configuration.event_store.tap do |store|
     store.subscribe(SeatReservation::ReadModel.new, to: [SeatReservation::Events::PassengerDataEntered])
+    store.subscribe(Notification::ReadModel.new, to: [SeatReservation::Events::PassengerCreated])
   end
 
   # Subscribe event handlers below
