@@ -11,6 +11,7 @@ Practice DDD technique:
 - aggregate roots
 
 ## Structure
+- Root folder **/domains** for domains
 - **SeatReservation** boundry context with two entities: **passenger** and **seat**, with *aggregate root*, and *read-model*
 - **Notification** boundry context with only the *read-model*, which is responsible for emails sending
 - **SearReservationController** and view pages
