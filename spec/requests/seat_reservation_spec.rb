@@ -1,26 +1,25 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe SeatReservationsController, type: :controller do
+RSpec.describe "Seat Reservation", type: :request do
   context 'GET #new' do
-    render_views
-
     it 'shows new page' do
-      get :new
+      get '/seat_reservation/new'
       expect(response).to have_http_status(:ok)
     end
   end
 
   context 'POST #reserve' do
     let(:reservation_id) { 123 }
+    let(:params) { {} }
 
     before do
-      expect(SecureRandom).to receive(:uuid).and_return(reservation_id).twice
+      expect(SecureRandom).to receive(:uuid).and_return(reservation_id).at_least(:once)
     end
 
     it 'redirects to user_input page' do
-      post :reserve
+      post '/seat_reservation/reserve', params: params
       expect(response).to redirect_to(user_input_seat_reservation_url(reservation_id: reservation_id))
     end
 
@@ -28,37 +27,43 @@ RSpec.describe SeatReservationsController, type: :controller do
       before { SeatReservation.new(reservation_id).reserve }
 
       it 'redirects to user_input page' do
-        post :reserve
+        post '/seat_reservation/reserve', params: params
         expect(response).to render_template :new
       end
     end
   end
 
   context 'GET #user_input' do
-    render_views
-
     let(:reservation_id) { 123 }
+    let(:params) { { reservation_id: reservation_id } }
 
     before { SeatReservation.new(reservation_id).reserve }
 
     it 'shows user_input page' do
-      get :user_input, params: { reservation_id: reservation_id }
+      get '/seat_reservation/user_input', params: params
       expect(response).to have_http_status(:ok)
     end
   end
 
   context 'POST #create_passenger' do
     let(:reservation_id) { 123 }
+    let(:params) { { reservation_id: reservation_id, passenger: passenger_attributes } }
+    let(:passenger_attributes) { { first_name: 'Gold', last_name: 'Man' } }
 
     before { SeatReservation.new(reservation_id).reserve }
 
-    it 'shows user_input page' do
-      post :create_passenger, params: {
-        reservation_id: reservation_id,
-        passenger: { first_name: 'Gold', last_name: 'Man' }
-      }
-
+    it 'redirects to payment confirmation page' do
+      post '/seat_reservation/create_passenger', params: params
       expect(response).to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
+    end
+
+    context 'when missing passenger data' do
+      let(:passenger_attributes) { { first_name: 'Gold', last_name: '' } }
+
+      it 'render user_input page' do
+        post '/seat_reservation/create_passenger', params: params
+        expect(response).not_to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
+      end
     end
   end
 end

@@ -35,7 +35,9 @@ RSpec.describe SeatReservation do
     context 'when seat was reserved before' do
       before do
         described_class.new(id).reserve
-        expect(AdminMailer).to receive(:passenger_created).and_return(double('admin_mailer', deliver_later: nil))
+        expect(AdminMailer).to receive(:passenger_created)
+          .with(a_hash_including(stream_id: id, passenger: an_instance_of(SeatReservation::Entities::Passenger)))
+          .and_call_original
       end
 
       it 'publishes events' do
