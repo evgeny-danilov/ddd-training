@@ -22,22 +22,19 @@ class SeatReservation
   def reserve
     raise InvalidTransaction unless resource.state == :initialized
 
-    apply_event Events::Reserved.new(data: { expired_at: Time.now + 3.hour })
+    broadcast(Events::Reserved, expired_at: Time.now + 3.hour)
   end
 
   def create_passenger(params:)
     raise InvalidTransaction unless resource.state == :reserved
 
-    apply_event Events::PassengerDataEntered.new(data: {
-      stream_name: stream_name, 
-      params: params
-    })
+    broadcast(Events::PassengerDataEntered, params: params)
   end
 
   def paid
     raise InvalidTransaction unless resource.state == :passenger_created
 
-    apply_event Events::SeatPaid.new(data: {})
+    broadcast(Events::Paid)
   end
 
   on Events::Reserved do |_event|
@@ -52,7 +49,7 @@ class SeatReservation
     @state = :passenger_created
   end
 
-  on Events::SeatPaid do |_event|
+  on Events::Paid do |_event|
     @state = :paid
   end
 
@@ -64,16 +61,8 @@ class SeatReservation
     Repository.new.with_id(id) { return @resource = _1 }
   end
 
-  def apply_event(event)
-    event_store.publish(event, stream_name: stream_name)
-    event
-  end
-
-  def stream_name
-    "SeatReservation$#{id}"
-  end
-
-  def event_store
-    Rails.configuration.event_store
+  def broadcast(event_class, payload)
+    event = event_class.new(data: payload.merge(stream_id: id))
+    event.tap { Publisher.broadcast(event) }
   end
 end

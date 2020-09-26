@@ -5,8 +5,8 @@ RSpec.describe SeatReservation do
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
 
-  def publish_event(event_class)
-    publish(an_event(event_class))
+  def publish_events(*event_classes)
+    publish(*event_classes.map(&method(:an_event)))
       .in(event_store)
       .in_stream(event_stream)
   end
@@ -15,7 +15,7 @@ RSpec.describe SeatReservation do
     subject { described_class.new(id).reserve }
 
     it 'publishes the Reserved event' do
-      expect { subject }.to publish_event(SeatReservation::Events::Reserved)
+      expect { subject }.to publish_events(SeatReservation::Events::Reserved)
     end
   end
 
@@ -35,12 +35,17 @@ RSpec.describe SeatReservation do
         described_class.new(id).reserve
       end
 
-      it 'publishes the PassengerDataEntered event' do
+      it 'publishes events' do
         expect { subject }.to(
-          change(SeatReservation::Entities::Passenger, :count).by(1).and(
-            publish_event(SeatReservation::Events::PassengerDataEntered)
+          publish_events(
+            SeatReservation::Events::PassengerDataEntered,
+            SeatReservation::Events::PassengerCreated
           )
         )
+      end
+
+      it 'creates passenger' do
+        expect { subject }.to change(SeatReservation::Entities::Passenger, :count).by(1)
 
         expect(SeatReservation::Entities::Passenger.last).to have_attributes(
           first_name: 'Gold',

@@ -3,23 +3,28 @@
 class SeatReservation
   module Actions
     class CreatePassenger
-      def initialize(stream_name:, params:)
-        @stream_name = stream_name
+      def initialize(stream_id:, params:)
+        @stream_id = stream_id
         @form = Forms::PassengerForm.new(params)
       end
 
       def call
-        Entities::Passenger.create(form.attributes)
-        passenger_created
+        create_passenger
+        broadcast_event
       end
 
       private
 
-      attr_reader :form, :stream_name
+      attr_reader :form, :stream_id
 
-      def passenger_created
-        event = Events::PassengerCreated.new(data: {})
-        Rails.configuration.event_store.publish(event, stream_name: stream_name)
+      def create_passenger
+        Entities::Passenger.create(form.attributes)
+      end
+
+      def broadcast_event
+        Publisher.broadcast(
+          Events::PassengerCreated.new(data: { stream_id: stream_id})
+        )
       end
     end
   end

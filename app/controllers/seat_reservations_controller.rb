@@ -22,8 +22,7 @@ class SeatReservationsController < ApplicationController
 
   # POST /create_passenger
   def create_passenger
-    qwe = aggregate_root(reservation_id).create_passenger(params: params.to_unsafe_h.deep_symbolize_keys)
-    byebug
+    aggregate_root(reservation_id).create_passenger(params: params.to_unsafe_h.deep_symbolize_keys)
 
     redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
   end

@@ -13,7 +13,7 @@ class SeatReservation
 
     def passenger_data_entered(payload)
       Actions::CreatePassenger.new(
-        stream_name: payload[:stream_name], 
+        stream_id: payload[:stream_id], 
         params: payload.dig(:params, :passenger)
       ).call
     end

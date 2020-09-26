@@ -5,6 +5,6 @@ class SeatReservation
     class Reserved              < RailsEventStore::Event; end
     class PassengerDataEntered  < RailsEventStore::Event; end
     class PassengerCreated      < RailsEventStore::Event; end
-    class SeatPaid              < RailsEventStore::Event; end
+    class Paid                  < RailsEventStore::Event; end
   end
 end
