@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Test application, appeared after the **Arkency DDD training** (https://www.youtube.com/c/Arkency)
 
-Things you may want to cover:
+## Goal
+Practice DDD technique:
+- event-driven design
+- event-source design
+- boundry contexts
+- read-models
+- aggregate roots
 
-* Ruby version
+## Structure
+- **SeatReservation** boundry context with two entities: **passenger** and **seat**, with *aggregate root*, and *read-model*
+- **Notification** boundry context with only the *read-model*, which is responsible for emails sending
+- **SearReservationController** and view pages
+- **AdminMailer** (dummy)
 
-* System dependencies
+## Tools
+- gem **rails_event_store** (https://railseventstore.org/)
+- **dry.rb** libraries (https://dry-rb.org/)
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## TODO
+- add auto-expiration of unpaid reservations
+- generate a report for paid reservation
