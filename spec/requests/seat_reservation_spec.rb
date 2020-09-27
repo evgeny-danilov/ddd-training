@@ -12,11 +12,7 @@ RSpec.describe 'Seat Reservation', type: :request do
 
   context 'POST #reserve' do
     let(:reservation_id) { 123 }
-    let(:params) { {} }
-
-    before do
-      expect(SecureRandom).to receive(:uuid).and_return(reservation_id).at_least(:once)
-    end
+    let(:params) { { reservation_id: reservation_id } }
 
     it 'redirects to user_input page' do
       post '/seat_reservation/reserve', params: params

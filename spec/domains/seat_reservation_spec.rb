@@ -24,7 +24,7 @@ RSpec.describe SeatReservation do
   context '#create_passenger' do
     subject { described_class.new(id).create_passenger(params: params) }
 
-    let(:params) { { passenger: { first_name: 'Gold', last_name: 'Man' } } }
+    let(:params) { { first_name: 'Gold', last_name: 'Man' } }
 
     context 'when seat has not been reserved' do
       it 'raises an error' do

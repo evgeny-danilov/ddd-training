@@ -3,15 +3,14 @@
 class SeatReservationsController < ApplicationController
   # GET /new
   def new
-    @seat_reservation = aggregate_root(nil)
+    @seat_reservation = aggregate_root(SecureRandom.uuid)
   end
 
   # POST /reserve
   def reserve
-    new_reservation_id = SecureRandom.uuid
-    aggregate_root(new_reservation_id).reserve
+    aggregate_root(resource_id).reserve
 
-    redirect_to user_input_seat_reservation_url(reservation_id: new_reservation_id)
+    redirect_to user_input_seat_reservation_url(reservation_id: resource_id)
   end
 
   # GET /user_input
@@ -21,7 +20,7 @@ class SeatReservationsController < ApplicationController
 
   # POST /create_passenger
   def create_passenger
-    aggregate_root(resource_id).create_passenger(params: params.to_unsafe_h.deep_symbolize_keys)
+    aggregate_root(resource_id).create_passenger(params: passenger_params)
 
     redirect_to payment_confirm_seat_reservation_url(reservation_id: resource_id)
   end
@@ -55,5 +54,9 @@ class SeatReservationsController < ApplicationController
 
   def aggregate_root(id)
     SeatReservation.new(id)
+  end
+
+  def passenger_params
+    params[:passenger].to_unsafe_hash.symbolize_keys
   end
 end
