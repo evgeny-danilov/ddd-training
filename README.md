@@ -7,13 +7,13 @@ Practice DDD technique:
 - event-driven design
 - event-source design
 - boundry contexts
-- read-models
 - aggregate roots
+- read-models (suscribers)
 
 ## Structure
 - Root folder **/domains** for domains
-- **SeatReservation** boundry context with two entities: **passenger** and **seat**, with *aggregate root*, and *read-model*
-- **Notification** boundry context with only the *read-model*, which is responsible for emails sending
+- **SeatReservation** boundry context with two entities: **passenger** and **seat**, with *aggregate root*, and *subscriber*
+- **Notification** boundry context with only the *subscriber*, which is responsible for emails sending
 - **SearReservationController** and view pages
 - **AdminMailer** (dummy)
 

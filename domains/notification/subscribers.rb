@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Notification
-  class ReadModel
+  class Subscribers
     def call(event)
       case event
       when SeatReservation::Events::PassengerCreated

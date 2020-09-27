@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SeatReservation
-  class Repository
+  class EventRepository
     def initialize(event_store = Rails.configuration.event_store)
       @repository = AggregateRoot::Repository.new(event_store)
     end

@@ -13,13 +13,13 @@ Rails.configuration.to_prepare do
   end
 
   Rails.configuration.event_store.tap do |store|
-    store.subscribe(SeatReservation::ReadModel.new, to: [SeatReservation::Events::PassengerDataEntered])
-    store.subscribe(Notification::ReadModel.new, to: [SeatReservation::Events::PassengerCreated])
+    store.subscribe(SeatReservation::Subscribers.new, to: [SeatReservation::Events::PassengerDataEntered])
+    store.subscribe(Notification::Subscribers.new, to: [SeatReservation::Events::PassengerCreated])
   end
 
   # Subscribe event handlers below
   # Rails.configuration.event_store.tap do |store|
-  #   store.subscribe(InvoiceReadModel.new, to: [InvoicePrinted])
+  #   store.subscribe(InvoiceSubscribers.new, to: [InvoicePrinted])
   #   store.subscribe(->(event) { SendOrderConfirmation.new.call(event) }, to: [OrderSubmitted])
   #   store.subscribe_to_all_events(->(event) { Rails.logger.info(event.type) })
   # end

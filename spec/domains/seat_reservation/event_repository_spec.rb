@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SeatReservation::Repository do
+RSpec.describe SeatReservation::EventRepository do
   let(:object_id) { 123 }
   let(:stream_name) { "SeatReservation$#{object_id}" }
   let(:event_store) { Rails.configuration.event_store }

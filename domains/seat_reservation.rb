@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'seat_reservation/events'
-require_relative 'seat_reservation/read_model'
+require_relative 'seat_reservation/subscribers'
 
 class SeatReservation
   include AggregateRoot
@@ -15,7 +15,7 @@ class SeatReservation
   attr_reader :state, :id
 
   def fetch
-    Repository.new.fetch(id)
+    EventRepository.new.fetch(id)
   end
 
   def reserve
@@ -57,7 +57,7 @@ class SeatReservation
   def resource
     return @resource if defined?(@resource)
 
-    Repository.new.with_id(id) { return @resource = _1 }
+    EventRepository.new.with_id(id) { return @resource = _1 }
   end
 
   def broadcast(event_class, payload)
