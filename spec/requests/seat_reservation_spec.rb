@@ -20,7 +20,7 @@ RSpec.describe 'Seat Reservation', type: :request do
     end
 
     context 'when seat has been reserved' do
-      before { SeatReservation.new(reservation_id).reserve }
+      before { SeatReservation::AggregateRoot.new(reservation_id).reserve }
 
       it 'redirects to user_input page' do
         post '/seat_reservation/reserve', params: params
@@ -33,7 +33,7 @@ RSpec.describe 'Seat Reservation', type: :request do
     let(:reservation_id) { 123 }
     let(:params) { { reservation_id: reservation_id } }
 
-    before { SeatReservation.new(reservation_id).reserve }
+    before { SeatReservation::AggregateRoot.new(reservation_id).reserve }
 
     it 'shows user_input page' do
       get '/seat_reservation/user_input', params: params
@@ -46,7 +46,7 @@ RSpec.describe 'Seat Reservation', type: :request do
     let(:params) { { reservation_id: reservation_id, passenger: passenger_attributes } }
     let(:passenger_attributes) { { first_name: 'Gold', last_name: 'Man' } }
 
-    before { SeatReservation.new(reservation_id).reserve }
+    before { SeatReservation::AggregateRoot.new(reservation_id).reserve }
 
     it 'redirects to payment confirmation page' do
       post '/seat_reservation/create_passenger', params: params

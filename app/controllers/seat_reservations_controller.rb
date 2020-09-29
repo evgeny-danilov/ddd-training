@@ -53,7 +53,7 @@ class SeatReservationsController < ApplicationController
   end
 
   def aggregate_root(id)
-    SeatReservation.new(id)
+    SeatReservation::AggregateRoot.new(id)
   end
 
   def passenger_params

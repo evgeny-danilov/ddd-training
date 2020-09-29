@@ -3,7 +3,7 @@
 class ApplicationController < ActionController::Base
   rescue_from Core::Forms::Error,
               with: :form_validation_error
-  rescue_from AggregateRootErrors::InvalidTransaction,
+  rescue_from Core::AggregateRoot::InvalidTransactionError,
               with: :invalid_transaction_error
 
   private

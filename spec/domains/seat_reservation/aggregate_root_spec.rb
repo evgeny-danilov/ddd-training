@@ -2,10 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe SeatReservation do
+RSpec.describe SeatReservation::AggregateRoot do
   let(:id) { 1 }
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
+  let(:read_model) { SeatReservation::ReadModel }
 
   def publish_events(*event_classes)
     publish(*event_classes.map(&method(:an_event)))
@@ -28,16 +29,13 @@ RSpec.describe SeatReservation do
 
     context 'when seat has not been reserved' do
       it 'raises an error' do
-        expect { subject }.to raise_error(AggregateRootErrors::InvalidTransaction)
+        expect { subject }.to raise_error(Core::AggregateRoot::InvalidTransactionError)
       end
     end
 
     context 'when seat was reserved before' do
       before do
         described_class.new(id).reserve
-        expect(AdminMailer).to receive(:passenger_created)
-          .with(a_hash_including(stream_id: id, passenger: an_instance_of(SeatReservation::Entities::Passenger)))
-          .and_call_original
       end
 
       it 'publishes events' do
@@ -49,13 +47,21 @@ RSpec.describe SeatReservation do
         )
       end
 
-      it 'creates passenger' do
-        expect { subject }.to change(SeatReservation::Entities::Passenger, :count).by(1)
+      it 'creates a passenger' do
+        expect { subject }.to change(read_model::Entities::Passenger, :count).by(1)
 
-        expect(SeatReservation::Entities::Passenger.last).to have_attributes(
+        expect(read_model::Entities::Passenger.last).to have_attributes(
           first_name: 'Gold',
           last_name: 'Man'
         )
+      end
+
+      it 'notify an admin' do
+        expect(AdminMailer).to receive(:passenger_created)
+          .with(a_hash_including(stream_id: id, passenger: an_instance_of(read_model::Entities::Passenger)))
+          .and_call_original
+
+        subject
       end
     end
   end

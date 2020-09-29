@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SeatReservation
+module SeatReservation
   class EventRepository
     def initialize(event_store = Rails.configuration.event_store)
       @repository = AggregateRoot::Repository.new(event_store)
@@ -19,7 +19,7 @@ class SeatReservation
     attr_reader :repository
 
     def domain_object(id)
-      SeatReservation.new(id)
+      SeatReservation::AggregateRoot.new(id)
     end
 
     def stream_name(id)
