@@ -9,15 +9,17 @@ class ApplicationController < ActionController::Base
   private
 
   def form_validation_error(exception)
-    redirect_back_after_error(message: exception.messages.join(', '))
+    redirect_back_after_error(
+      full_message: exception.object_with_errors.errors.full_messages.join(', ')
+    )
   end
 
   def invalid_transaction_error
-    redirect_back_after_error(message: 'Invalid Transaction')
+    redirect_back_after_error(full_message: 'Invalid Transaction')
   end
 
-  def redirect_back_after_error(message:)
-    flash[:alert] = message
+  def redirect_back_after_error(full_message:)
+    flash[:alert] = full_message
     load_resource if defined?(load_resource) && resource_id.present?
     redirect_back(fallback_location: '/')
   end

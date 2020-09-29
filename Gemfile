@@ -22,6 +22,7 @@ gem 'simple_form'
 gem 'dry-struct'
 gem 'dry-types'
 gem 'dry-validation'
+gem 'dry-monads'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
