@@ -23,5 +23,6 @@ Practice DDD technique:
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
+- correct the behaviour when user enter incorrent passenger data
 - add auto-expiration of unpaid reservations
 - generate a report for paid reservation

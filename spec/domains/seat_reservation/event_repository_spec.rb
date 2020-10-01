@@ -4,12 +4,13 @@ require 'rails_helper'
 
 RSpec.describe SeatReservation::EventRepository do
   let(:object_id) { 123 }
+  let(:seat_params) { { number: 32 } }
   let(:stream_name) { "SeatReservation$#{object_id}" }
   let(:event_store) { Rails.configuration.event_store }
 
   def store_event(event_name)
     described_class.new.with_id(object_id) do |item|
-      item.public_send(event_name)
+      item.public_send(event_name, params: seat_params)
     end
   end
 

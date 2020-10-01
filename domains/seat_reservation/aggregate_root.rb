@@ -15,10 +15,10 @@ module SeatReservation
       EventRepository.new.fetch(id)
     end
 
-    def reserve
+    def reserve(params:)
       raise InvalidTransactionError unless resource.state == :initialized
 
-      broadcast(Events::Reserved, expired_at: Time.now + 3.hour)
+      broadcast(Events::Reserved, params: params, expired_at: Time.now + 3.hour)
     end
 
     def create_passenger(params:)

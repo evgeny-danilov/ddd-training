@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SeatReservation::AggregateRoot do
   let(:id) { 1 }
+  let(:seat_number) { 32 }
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
   let(:read_model) { SeatReservation::ReadModel }
@@ -15,7 +16,7 @@ RSpec.describe SeatReservation::AggregateRoot do
   end
 
   context '#reserve' do
-    subject { described_class.new(id).reserve }
+    subject { described_class.new(id).reserve(params: { seat_number: seat_number }) }
 
     it 'publishes the Reserved event' do
       expect { subject }.to publish_events(SeatReservation::Events::Reserved)
@@ -23,9 +24,9 @@ RSpec.describe SeatReservation::AggregateRoot do
   end
 
   context '#create_passenger' do
-    subject { described_class.new(id).create_passenger(params: params) }
+    subject { described_class.new(id).create_passenger(params: passenger_params) }
 
-    let(:params) { { first_name: 'Gold', last_name: 'Man' } }
+    let(:passenger_params) { { first_name: 'Gold', last_name: 'Man' } }
 
     context 'when seat has not been reserved' do
       it 'raises an error' do
@@ -35,7 +36,7 @@ RSpec.describe SeatReservation::AggregateRoot do
 
     context 'when seat was reserved before' do
       before do
-        described_class.new(id).reserve
+        described_class.new(id).reserve(params: { seat_number: seat_number })
       end
 
       it 'publishes events' do

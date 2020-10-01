@@ -5,6 +5,8 @@ module SeatReservation
     class Subscribers
       def call(event)
         case event
+        when SeatReservation::Events::Reserved
+          seat_reserved(event.data)
         when SeatReservation::Events::PassengerDataEntered
           passenger_data_entered(event.data)
         end
@@ -12,11 +14,12 @@ module SeatReservation
 
       private
 
+      def seat_reserved(payload)
+        Actions::CreateSeatReservation.new(payload).call
+      end
+
       def passenger_data_entered(payload)
-        Actions::CreatePassenger.new(
-          stream_id: payload[:stream_id],
-          params: payload[:params]
-        ).call
+        Actions::CreatePassenger.new(payload).call
       end
     end
   end

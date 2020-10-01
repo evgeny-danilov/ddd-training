@@ -8,7 +8,7 @@ class SeatReservationsController < ApplicationController
 
   # POST /reserve
   def reserve
-    aggregate_root(resource_id).reserve
+    aggregate_root(resource_id).reserve(params: seat_params)
 
     redirect_to user_input_seat_reservation_url(reservation_id: resource_id)
   end
@@ -62,5 +62,9 @@ class SeatReservationsController < ApplicationController
 
   def passenger_params
     params[:passenger].to_unsafe_hash.deep_symbolize_keys
+  end
+
+  def seat_params
+    params[:seat].to_unsafe_hash.deep_symbolize_keys
   end
 end
