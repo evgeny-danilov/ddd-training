@@ -1,6 +1,6 @@
 %h1 Choose the seat
 
 .container
-  = simple_form_for :seat, url: reserve_seat_reservation_url(reservation_id: @seat_reservation.id) do |f|
+  = simple_form_for :seat, url: reserve_seat_reservation_url(reservation_id: @resource.id) do |f|
     = f.input :number, label: 'Seat Number'
     = f.button :submit, class: 'btn btn-success'

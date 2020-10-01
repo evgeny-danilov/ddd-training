@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
     redirect_back_after_error(
       full_message: exception.object_with_errors.errors.full_messages.join(', ')
     )
+
+    # TODO: try to show errors on the form:
+    # referer = request.headers["Referer"]
+    # previous_action_name = referer.scan(/\/#{controller_name.singularize}\/(.+)\?/).flatten.first
+    # @resource = exception.object_with_errors
+    # render previous_action_name
   end
 
   def invalid_transaction_error

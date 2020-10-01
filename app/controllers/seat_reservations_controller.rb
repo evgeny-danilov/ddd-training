@@ -3,7 +3,7 @@
 class SeatReservationsController < ApplicationController
   # GET /new
   def new
-    @seat_reservation = aggregate_root(SecureRandom.uuid)
+    @resource = new_resource
   end
 
   # POST /reserve
@@ -44,19 +44,23 @@ class SeatReservationsController < ApplicationController
 
   private
 
+  def aggregate_root(id)
+    SeatReservation::AggregateRoot.new(id)
+  end
+
+  def new_resource
+    aggregate_root(SecureRandom.uuid)
+  end
+
   def load_resource
-    @seat_reservation = aggregate_root(resource_id).fetch
+    @resource ||= aggregate_root(resource_id).fetch
   end
 
   def resource_id
     params[:reservation_id]
   end
 
-  def aggregate_root(id)
-    SeatReservation::AggregateRoot.new(id)
-  end
-
   def passenger_params
-    params[:passenger].to_unsafe_hash.symbolize_keys
+    params[:passenger].to_unsafe_hash.deep_symbolize_keys
   end
 end
