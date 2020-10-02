@@ -4,6 +4,7 @@ module SeatReservation
   module ReadModel
     module Actions
       class CreateSeatReservation
+
         def initialize(stream_id:, params:)
           @stream_id = stream_id
           @form = Forms::SeatReservationForm.new(params)
@@ -11,10 +12,7 @@ module SeatReservation
 
         def call
           validate!
-          new_reservation.tap do |seat_reservation|
-            seat_reservation.save
-            broadcast_event(seat_reservation: seat_reservation)
-          end
+          Command.save(new_reservation)
         end
 
         private
@@ -32,8 +30,6 @@ module SeatReservation
           Entities::SeatReservation.new(form.attributes)
         end
 
-        def broadcast_event(seat_reservation:)
-        end
       end
     end
   end

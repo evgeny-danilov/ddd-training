@@ -11,10 +11,8 @@ module SeatReservation
 
         def call
           validate!
-          new_passenger.tap do |passenger|
-            passenger.save
-            broadcast_event(passenger: passenger)
-          end
+          Command.save(passenger)
+          after_save
         end
 
         private
@@ -25,14 +23,14 @@ module SeatReservation
           validator = Validators::PassengerFormValidator.new.call(form.attributes)
           return if validator.success?
 
-          raise Core::Forms::Error, errors: validator.errors, object: new_passenger
+          raise Core::Forms::Error, errors: validator.errors, object: passenger
         end
 
-        def new_passenger
-          Entities::Passenger.new(form.attributes)
+        def passenger
+          @passenger||= Entities::Passenger.new(form.attributes)
         end
 
-        def broadcast_event(passenger:)
+        def after_save
           Publisher.broadcast(
             Events::PassengerCreated.new(data: { stream_id: stream_id, passenger: passenger })
           )
