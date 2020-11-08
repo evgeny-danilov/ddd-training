@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class SeatReservationsController < ApplicationController
+  # GET /index
+  def index
+    # @resources = seat_reservation_read_model.all
+  end
+
   # GET /new
   def new
     @resource = new_resource
@@ -53,7 +58,9 @@ class SeatReservationsController < ApplicationController
   end
 
   def load_resource
-    @resource ||= aggregate_root(resource_id).fetch
+    return @resource if defined?(@resource)
+
+    @resource = aggregate_root(resource_id).fetch
   end
 
   def resource_id
@@ -61,10 +68,10 @@ class SeatReservationsController < ApplicationController
   end
 
   def passenger_params
-    params[:passenger].to_unsafe_hash.deep_symbolize_keys
+    params[:passenger]
   end
 
   def seat_params
-    params[:seat].to_unsafe_hash.deep_symbolize_keys
+    params[:seat]
   end
 end

@@ -19,10 +19,10 @@ gem 'bootstrap', '~> 5.0.0.alpha1'
 gem 'jquery-rails'
 gem 'simple_form'
 
+gem 'dry-monads'
 gem 'dry-struct'
 gem 'dry-types'
 gem 'dry-validation'
-gem 'dry-monads'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

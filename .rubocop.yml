@@ -3,6 +3,7 @@ AllCops:
   Exclude:
     - 'bin/bundle'
     - 'db/migrate/*'
+    - 'db/schema.rb'
     - 'config/initializers/*'
 
 Style/BlockComments:

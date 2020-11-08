@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SeatReservation::ReadModel::Forms::SeatReservationForm do
+RSpec.describe SeatReservation::Forms::SeatReservationForm do
   subject { described_class.new(params) }
 
   context 'with valid params' do

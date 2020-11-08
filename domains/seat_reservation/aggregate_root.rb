@@ -18,13 +18,15 @@ module SeatReservation
     def reserve(params:)
       raise InvalidTransactionError unless resource.state == :initialized
 
-      broadcast(Events::Reserved, params: params, expired_at: Time.now + 3.hour)
+      attributes = Actions::SeatReservationAttributes.new(params: params).call
+      broadcast(Events::Reserved, params: attributes, expired_at: Time.now + 3.hour)
     end
 
     def create_passenger(params:)
       raise InvalidTransactionError unless resource.state == :reserved
 
-      broadcast(Events::PassengerDataEntered, params: params)
+      attributes = Actions::PassengerAttributes.new(params: params).call
+      broadcast(Events::PassengerCreated, params: attributes)
     end
 
     def paid
@@ -59,7 +61,11 @@ module SeatReservation
 
     def broadcast(event_class, payload)
       event = event_class.new(data: payload.merge(stream_id: id))
-      event.tap { Publisher.broadcast(event) }
+      event.tap { Publisher.broadcast(event, stream_name) }
+    end
+
+    def stream_name
+      "SeatReservation$#{id}"
     end
   end
 end

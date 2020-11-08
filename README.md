@@ -8,7 +8,7 @@ Practice DDD technique:
 - event-source design
 - boundry contexts
 - aggregate roots
-- read-models (suscribers)
+- read-models (subscribers)
 
 ## Structure
 - Root folder **/domains** for domains
@@ -23,6 +23,9 @@ Practice DDD technique:
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
-- correct the behaviour when user enter incorrent passenger data
+- validate uniqueness of the seat number
+- move specs in domain folder
+- rename table `passengers` to `seat_reservation_passengers`
+- correct the behaviour when user enter incorrect passenger data
 - add auto-expiration of unpaid reservations
 - generate a report for paid reservation

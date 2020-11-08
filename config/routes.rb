@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   mount RailsEventStore::Browser => '/res' if Rails.env.development?
 
   resource :seat_reservation do
+    get :index
     get :new
     post :reserve
     get :user_input

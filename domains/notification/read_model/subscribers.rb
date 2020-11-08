@@ -13,6 +13,7 @@ module Notification
       private
 
       def passenger_created(payload)
+        # TODO: Find Flight No and pass it to mailer
         AdminMailer.passenger_created(payload).deliver_later
       end
     end

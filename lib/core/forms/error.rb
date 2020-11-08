@@ -3,7 +3,6 @@
 module Core
   module Forms
     class Error < StandardError
-
       def initialize(errors:, object:)
         @errors = errors
         @object = object
@@ -22,11 +21,10 @@ module Core
         errors.messages.each do |message|
           field = message.path.first
           text = message.text
-          
+
           object.errors.add(field, text)
         end
       end
-
     end
   end
 end

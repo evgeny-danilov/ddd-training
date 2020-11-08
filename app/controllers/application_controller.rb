@@ -29,4 +29,8 @@ class ApplicationController < ActionController::Base
     load_resource if defined?(load_resource) && resource_id.present?
     redirect_back(fallback_location: '/')
   end
+
+  def params
+    super.to_unsafe_hash.deep_symbolize_keys
+  end
 end

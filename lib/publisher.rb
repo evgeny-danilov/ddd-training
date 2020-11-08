@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Publisher
-  def self.broadcast(event)
-    new(event).broadcast
+  def self.broadcast(event, stream_name)
+    new(event, stream_name).broadcast
   end
 
-  def initialize(event)
+  def initialize(event, stream_name)
     @event = event
+    @stream_name = stream_name
   end
 
   def broadcast
@@ -15,17 +16,5 @@ class Publisher
 
   private
 
-  attr_reader :event
-
-  def stream_name
-    "#{stream_prefix}$#{stream_id}"
-  end
-
-  def stream_id
-    event.data[:stream_id]
-  end
-
-  def stream_prefix
-    event.class.to_s.split('::').first
-  end
+  attr_reader :event, :stream_name
 end
