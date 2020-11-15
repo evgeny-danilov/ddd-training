@@ -4,7 +4,7 @@ module SeatReservation
   module ReadModel
     class PassengerReadModel
       class PassengerAR < ApplicationRecord
-        self.table_name = 'passengers'
+        self.table_name = 'seat_reservation_passengers'
       end
 
       def call(event)

@@ -23,7 +23,6 @@ Practice DDD technique:
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
-- rename table `passengers` to `seat_reservation_passengers`
 - correct the behaviour when user enter incorrect passenger data
 - add auto-expiration of unpaid reservations
 - generate a report for paid reservation
