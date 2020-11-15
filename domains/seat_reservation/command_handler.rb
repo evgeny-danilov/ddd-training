@@ -11,15 +11,21 @@ module SeatReservation
     end
 
     def self.reserve(uuid:, params:)
-      AggregateRoot.new(uuid).reserve(params: params)
+      ActiveRecord::Base.transaction do
+        AggregateRoot.new(uuid).reserve(params: params)
+      end
     end
 
     def self.create_passenger(uuid:, params:)
-      AggregateRoot.new(uuid).create_passenger(params: params)
+      ActiveRecord::Base.transaction do
+        AggregateRoot.new(uuid).create_passenger(params: params)
+      end
     end
 
     def self.paid(uuid:)
-      AggregateRoot.new(uuid).paid
+      ActiveRecord::Base.transaction do
+        AggregateRoot.new(uuid).paid
+      end
     end
 
     #def reserve(uuid:, params:)

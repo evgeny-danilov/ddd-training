@@ -7,7 +7,8 @@ RSpec.describe SeatReservation::AggregateRoot do
   let(:seat_number) { 32 }
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
-  let(:read_model) { SeatReservation::ReadModel::PassengerReadModel }
+  let(:passengers_table) { SeatReservation::ReadModel::PassengerReadModel::PassengerAR }
+  let(:seat_reservations_table) { SeatReservation::ReadModel::SeatReservationReadModel::SeatReservationAR }
 
   def publish_events(*event_classes)
     publish(*event_classes.map(&method(:an_event)))
@@ -20,6 +21,14 @@ RSpec.describe SeatReservation::AggregateRoot do
 
     it 'publishes the Reserved event' do
       expect { subject }.to publish_events(SeatReservation::Events::Reserved)
+    end
+
+    context 'when seat has already reserved by other passenger' do
+      before { seat_reservations_table.create!(number: seat_number) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(SeatReservation::AggregateRoot::SeatHasAlreadyReserved)
+      end
     end
   end
 
@@ -34,7 +43,7 @@ RSpec.describe SeatReservation::AggregateRoot do
       end
     end
 
-    context 'when seat was reserved before' do
+    context 'when seat has been reserved by guest' do
       before do
         described_class.new(id).reserve(params: { number: seat_number })
       end
@@ -44,9 +53,9 @@ RSpec.describe SeatReservation::AggregateRoot do
       end
 
       it 'creates a passenger' do
-        expect { subject }.to change(read_model::PassengerAR, :count).by(1)
+        expect { subject }.to change(passengers_table, :count).by(1)
 
-        expect(read_model::PassengerAR.where(passenger_params).count).to eq(1)
+        expect(passengers_table.where(passenger_params).count).to eq(1)
       end
 
       it 'notify an admin' do

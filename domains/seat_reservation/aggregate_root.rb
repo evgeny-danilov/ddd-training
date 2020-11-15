@@ -4,6 +4,8 @@ module SeatReservation
   class AggregateRoot
     include Core::AggregateRoot
 
+    SeatHasAlreadyReserved = Class.new(StandardError)
+
     def initialize(id)
       @state = :initialized
       @id = id
@@ -17,6 +19,7 @@ module SeatReservation
 
     def reserve(params:)
       raise InvalidTransactionError unless resource.state == :initialized
+      raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(params[:number])
 
       broadcast(Events::Reserved, {
         params: params,

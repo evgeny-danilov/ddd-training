@@ -23,7 +23,7 @@ module SeatReservation
       end
 
       def already_reserved?(number)
-        SeatReservationAR.exists?(number)
+        SeatReservationAR.exists?(number: number)
       end
 
       private
