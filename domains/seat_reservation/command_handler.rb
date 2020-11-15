@@ -2,44 +2,48 @@
 
 module SeatReservation
   class CommandHandler
-    def reserve(params:)
-      ActiveRecord::Base.transaction do
-        with_resource(uuid) do |resource|
-          resource.reserve(params: params)
-        end
-      end
+    def self.new_resource(uuid:)
+      AggregateRoot.new(uuid)
     end
 
-    #def create_passenger(params:)
+    def self.load_resource(uuid:)
+      AggregateRoot.new(uuid).fetch
+    end
+
+    def self.reserve(uuid:, params:)
+      AggregateRoot.new(uuid).reserve(params: params)
+    end
+
+    def self.create_passenger(uuid:, params:)
+      AggregateRoot.new(uuid).create_passenger(params: params)
+    end
+
+    def self.paid(uuid:)
+      AggregateRoot.new(uuid).paid
+    end
+
+    #def reserve(uuid:, params:)
+    #  ActiveRecord::Base.transaction do
+    #    EventRepository.new.with_id(uuid) do |resource|
+    #      resource.reserve(params: params)
+    #    end
+    #  end
     #end
-
-    #def paid(params:)
+    #
+    #def create_passenger(uuid:, params:)
+    #  ActiveRecord::Base.transaction do
+    #    EventRepository.new.with_id(uuid) do |resource|
+    #      resource.create_passenger(params: params)
+    #    end
+    #  end
     #end
-
-    private
-
-    def with_resource(uuid)
-      AggregateRoot::SeatReservation.new(uuid).tap do |seat_reservation|
-        load_seat_reservation(uuid, seat_reservation)
-        yield(seat_reservation)
-        store_seat_reservation(seat_reservation)
-      end
-    end
-
-    def load_seat_reservation(uuid, seat_reservation)
-      seat_reservation.load(stream_name(uuid), event_store: event_store)
-    end
-
-    def store_seat_reservation(seat_reservation)
-      seat_reservation.store(event_store: event_store)
-    end
-
-    def stream_name(uuid)
-      "SeatReservation$#{uuid}"
-    end
-
-    def event_store
-      Rails.configuration.event_store
-    end
+    #
+    #def paid(uuid:, params:)
+    #  ActiveRecord::Base.transaction do
+    #    EventRepository.new.with_id(uuid) do |resource|
+    #      resource.paid(params: params)
+    #    end
+    #  end
+    #end
   end
 end

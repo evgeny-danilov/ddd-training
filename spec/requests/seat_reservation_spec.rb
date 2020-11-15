@@ -23,7 +23,7 @@ RSpec.describe 'Seat Reservation', type: :request do
     end
 
     context 'when seat has been reserved' do
-      before { aggregate_root.reserve(params: seat_params) }
+      before { post '/seat_reservation/reserve', params: params }
 
       it 'redirects to user_input page' do
         post '/seat_reservation/reserve', params: params
