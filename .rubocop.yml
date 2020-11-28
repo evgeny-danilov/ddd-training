@@ -16,3 +16,4 @@ Style/Documentation:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'domains/**/*_spec.rb'

@@ -24,5 +24,6 @@ Practice DDD technique:
 
 ## TODO
 - correct the behaviour when user enter incorrect passenger data
+- add factories for specs
 - add auto-expiration of unpaid reservations
 - generate a report for paid reservation
