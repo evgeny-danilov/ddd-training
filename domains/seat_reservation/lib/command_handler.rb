@@ -28,28 +28,28 @@ module SeatReservation
       end
     end
 
-    #def reserve(uuid:, params:)
+    # def reserve(uuid:, params:)
     #  ActiveRecord::Base.transaction do
     #    EventRepository.new.with_id(uuid) do |resource|
     #      resource.reserve(params: params)
     #    end
     #  end
-    #end
+    # end
     #
-    #def create_passenger(uuid:, params:)
+    # def create_passenger(uuid:, params:)
     #  ActiveRecord::Base.transaction do
     #    EventRepository.new.with_id(uuid) do |resource|
     #      resource.create_passenger(params: params)
     #    end
     #  end
-    #end
+    # end
     #
-    #def paid(uuid:, params:)
+    # def paid(uuid:, params:)
     #  ActiveRecord::Base.transaction do
     #    EventRepository.new.with_id(uuid) do |resource|
     #      resource.paid(params: params)
     #    end
     #  end
-    #end
+    # end
   end
 end

@@ -22,17 +22,17 @@ module SeatReservation
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(params[:number])
 
       broadcast(Events::Reserved, {
-        params: params,
-        expired_at: Time.now + 3.hour
-      })
+                  params: params,
+                  expired_at: Time.now + 3.hour
+                })
     end
 
     def create_passenger(params:)
       raise InvalidTransactionError unless resource.state == :reserved
 
       broadcast(Events::PassengerCreated, {
-        params: params
-      })
+                  params: params
+                })
     end
 
     def paid
