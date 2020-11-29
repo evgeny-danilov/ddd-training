@@ -15,6 +15,7 @@ Rails.configuration.to_prepare do
   Rails.configuration.event_store.tap do |store|
     store.subscribe(SeatReservation::ReadModel::SeatReservationReadModel.new, to: [SeatReservation::Events::Reserved])
     store.subscribe(SeatReservation::ReadModel::PassengerReadModel.new, to: [SeatReservation::Events::PassengerCreated])
+    store.subscribe(Flight::ReadModel::FlightReadModel.new, to: [Flight::Events::Scheduled])
     store.subscribe(Notification::ReadModel::Subscribers.new, to: [SeatReservation::Events::PassengerCreated])
   end
 

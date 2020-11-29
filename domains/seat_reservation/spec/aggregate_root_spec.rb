@@ -53,9 +53,7 @@ RSpec.describe SeatReservation::AggregateRoot do
       end
 
       it 'creates a passenger' do
-        expect { subject }.to change(passengers_table, :count).by(1)
-
-        expect(passengers_table.where(passenger_params).count).to eq(1)
+        expect { subject }.to change(passengers_table.where(passenger_params), :count).by(1)
       end
 
       it 'notify an admin' do
