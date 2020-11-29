@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_165625) do
+ActiveRecord::Schema.define(version: 2020_11_29_081920) do
 
   create_table "event_store_events", id: :string, limit: 36, force: :cascade do |t|
     t.string "event_type", null: false
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(version: 2020_11_28_165625) do
     t.index ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
     t.index ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
     t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
+  end
+
+  create_table "flights", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.integer "route_id", null: false
+    t.datetime "departure_at"
+    t.datetime "arrival_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["route_id"], name: "index_flights_on_route_id"
   end
 
   create_table "routes", force: :cascade do |t|
@@ -55,4 +65,5 @@ ActiveRecord::Schema.define(version: 2020_11_28_165625) do
     t.string "event_id"
   end
 
+  add_foreign_key "flights", "routes"
 end
