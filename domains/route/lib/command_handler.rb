@@ -7,8 +7,9 @@ module Route
     class << self
       def create(params:)
         ActiveRecord::Base.transaction do
-          route = ReadModel::RouteReadModel.new.build
-          Assign::RouteAttributes.new(object: route, params: params).call
+          route = ReadModel::RouteReadModel.new.build(
+            Attributes::RouteAttributes.new(object: route, params: params).call
+          )
           Command.save(route)
         end
       rescue Dry::Struct::Error => e

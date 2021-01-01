@@ -11,8 +11,8 @@ module Route
         RouteAR.all
       end
 
-      def build
-        RouteAR.new
+      def build(attributes = {})
+        RouteAR.new(attributes)
       end
     end
   end

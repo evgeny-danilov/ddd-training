@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Route
-  module Assign
+  module Attributes
     class RouteAttributes
       def initialize(object:, params:)
         @form = Forms::RouteForm.new(params)
@@ -14,7 +14,7 @@ module Route
           raise Core::Forms::Error, errors: result.errors, object: object if result.failure?
         end
 
-        object.assign_attributes(form.attributes)
+        form.attributes
       end
 
       private

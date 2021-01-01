@@ -4,14 +4,14 @@ module SeatReservation
   module Events
     class Reserved < RailsEventStore::Event
       def self.strict(data)
-        params = Actions::SeatReservationAttributes.new(params: data[:params]).call
+        params = Attributes::SeatReservationAttributes.new(params: data[:params]).call
         new(data: { params: params, stream_id: data[:stream_id] })
       end
     end
 
     class PassengerCreated < RailsEventStore::Event
       def self.strict(data)
-        params = Actions::PassengerAttributes.new(params: data[:params]).call
+        params = Attributes::PassengerAttributes.new(params: data[:params]).call
         new(data: { params: params, stream_id: data[:stream_id] })
       end
     end

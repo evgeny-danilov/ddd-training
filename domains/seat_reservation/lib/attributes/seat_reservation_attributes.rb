@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module SeatReservation
-  module Actions
-    class PassengerAttributes
+  module Attributes
+    class SeatReservationAttributes
       def initialize(params:)
-        @form = Forms::PassengerForm.new(params)
-        @validator = Validators::PassengerFormValidator.new
-        @object = ReadModel::PassengerReadModel.new.build(form.attributes)
+        @form = Forms::SeatReservationForm.new(params)
+        @validator = Validators::SeatReservationFormValidator.new
+        @object = ReadModel::SeatReservationReadModel.new.build(form.attributes)
       end
 
       def call

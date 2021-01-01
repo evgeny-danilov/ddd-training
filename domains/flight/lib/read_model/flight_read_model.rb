@@ -24,6 +24,10 @@ module Flight
         Table.new(attributes)
       end
 
+      def scheduled?(uuid)
+        Table.find_by(uuid: uuid)
+      end
+
       private
 
       def create_flight(params)

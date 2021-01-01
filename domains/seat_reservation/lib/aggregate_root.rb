@@ -5,6 +5,7 @@ module SeatReservation
     include Core::AggregateRoot
 
     SeatHasAlreadyReserved = Class.new(StandardError)
+    FlightIsNotAvailable = Class.new(StandardError)
 
     def initialize(id)
       @state = :initialized
@@ -20,6 +21,7 @@ module SeatReservation
     def reserve(params:)
       raise InvalidTransactionError unless resource.state == :initialized
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(params[:number])
+      #raise FlightIsNotAvailable unless Flight::ReadModel::FlightReadModel.new.scheduled?(params[:flight_uuid])
 
       broadcast(Events::Reserved, {
                   params: params,
