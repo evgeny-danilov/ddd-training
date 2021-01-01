@@ -8,7 +8,7 @@ RSpec.describe Flight::EventRepository do
   let(:stream_name) { "Flight$#{uuid}" }
   let(:event_store) { Rails.configuration.event_store }
 
-  let(:routes_table) { Route::ReadModel::RouteReadModel::RouteAR }
+  let(:routes_table) { Route::ReadModel::RouteReadModel::Table }
   let(:route) do
     routes_table.create(
       name: 'QT-123',

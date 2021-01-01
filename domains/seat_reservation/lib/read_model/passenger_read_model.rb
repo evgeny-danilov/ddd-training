@@ -3,7 +3,7 @@
 module SeatReservation
   module ReadModel
     class PassengerReadModel
-      class PassengerAR < ApplicationRecord
+      class Table < ApplicationRecord
         self.table_name = 'seat_reservation_passengers'
       end
 
@@ -15,17 +15,17 @@ module SeatReservation
       end
 
       def all
-        PassengerAR.all
+        Table.all
       end
 
       def build(attributes)
-        PassengerAR.new(attributes)
+        Table.new(attributes)
       end
 
       private
 
       def create_passenger_record(params)
-        PassengerAR.create!(params)
+        Table.create!(params)
       end
     end
   end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Flight::AggregateRoot do
   let(:flights_table) { Flight::ReadModel::FlightReadModel::Table }
-  let(:routes_table) { Route::ReadModel::RouteReadModel::RouteAR }
+  let(:routes_table) { Route::ReadModel::RouteReadModel::Table }
   let(:uuid) { '12345' }
 
   let(:route) do

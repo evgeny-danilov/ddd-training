@@ -3,16 +3,16 @@
 module Route
   module ReadModel
     class RouteReadModel
-      class RouteAR < ApplicationRecord
+      class Table < ApplicationRecord
         self.table_name = 'routes'
       end
 
       def all
-        RouteAR.all
+        Table.all
       end
 
       def build(attributes = {})
-        RouteAR.new(attributes)
+        Table.new(attributes)
       end
     end
   end
