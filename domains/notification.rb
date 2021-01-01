@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require_relative 'notification/lib/read_model/subscribers'
+Dir["domains/notification/lib/**/*.rb"].each { |file| require File.join('./', file) }

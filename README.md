@@ -25,10 +25,12 @@ Practice DDD technique:
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
-- dry domain's `require file` with auto-iterations by the domain folder
 - revise passing params through `broadcast` method (make it in more explicit way)
 - dry `attributes` / `forms` / `event_repositories`
 - adjust the behaviour when user enter incorrect passenger data
 - add factories for specs
+
+## IDEAS FOR FURTHER IMPROVEMENTS
+- notify passengers if flight cancelled
 - add auto-expiration of unpaid reservations
-- generate a report for paid reservation
+- generate a report for a paid reservation
