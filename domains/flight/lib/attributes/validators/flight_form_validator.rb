@@ -7,8 +7,8 @@ module Flight
         params do
           required(:uuid).filled(:string)
           required(:route_id).filled(:integer)
-          #required(:depatrure_at).filled(:datetime)
-          #required(:arrival_at).filled(:datetime)
+          # required(:depatrure_at).filled(:datetime)
+          # required(:arrival_at).filled(:datetime)
         end
       end
     end

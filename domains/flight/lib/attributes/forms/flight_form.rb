@@ -9,9 +9,9 @@ module Flight
 
       class FlightForm < Dry::Struct
         attribute :uuid, Types::String
-        attribute :route_id,  Types::Integer
-        #attribute :departure_at,  Types::DateTime
-        #attribute :arrival_at,  Types::DateTime
+        attribute :route_id, Types::Integer
+        # attribute :departure_at,  Types::DateTime
+        # attribute :arrival_at,  Types::DateTime
       end
     end
   end

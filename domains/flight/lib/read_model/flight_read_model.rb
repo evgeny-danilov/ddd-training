@@ -25,7 +25,7 @@ module Flight
       end
 
       def scheduled?(uuid)
-        Table.find_by(uuid: uuid)
+        Table.exists?(uuid: uuid, status: 'schedule')
       end
 
       private
