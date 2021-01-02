@@ -2,24 +2,25 @@
 
 module Flight
   class CommandHandler
-    def self.new_resource(uuid:)
+    include Core::CommandHandler
+
+    def new_resource(uuid:)
       AggregateRoot.new(uuid)
     end
 
-    def self.load_resource(uuid:)
+    def load_resource(uuid:)
       AggregateRoot.new(uuid).fetch
     end
 
-    def self.schedule(uuid:, params:)
-      ActiveRecord::Base.transaction do
-        AggregateRoot.new(uuid).schedule(params: params)
-      end
+    def schedule(uuid:, params:)
+      form = Forms::FlightForm.new(params)
+      assert(form, validator: Validators::FlightFormValidator.new)
+
+      transaction { AggregateRoot.new(uuid).schedule(params: form.attributes) }
     end
 
-    def self.cancel(uuid:)
-      ActiveRecord::Base.transaction do
-        AggregateRoot.new(uuid).cancel
-      end
+    def cancel(uuid:)
+      transaction  { AggregateRoot.new(uuid).cancel }
     end
   end
 end

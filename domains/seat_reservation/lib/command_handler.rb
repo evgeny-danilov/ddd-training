@@ -2,30 +2,32 @@
 
 module SeatReservation
   class CommandHandler
-    def self.new_resource(uuid:)
+    include Core::CommandHandler::Helpers
+
+    def new_resource(uuid:)
       AggregateRoot.new(uuid)
     end
 
-    def self.load_resource(uuid:)
+    def load_resource(uuid:)
       AggregateRoot.new(uuid).fetch
     end
 
-    def self.reserve(uuid:, params:)
-      ActiveRecord::Base.transaction do
-        AggregateRoot.new(uuid).reserve(params: params)
-      end
+    def reserve(uuid:, params:)
+      form = Forms::SeatReservationForm.new(params)
+      assert(form, validator: Validators::SeatReservationFormValidator.new)
+
+      transaction { AggregateRoot.new(uuid).reserve(params: form.attributes) }
     end
 
-    def self.create_passenger(uuid:, params:)
-      ActiveRecord::Base.transaction do
-        AggregateRoot.new(uuid).create_passenger(params: params)
-      end
+    def create_passenger(uuid:, params:)
+      form = Forms::PassengerForm.new(params)
+      assert(form, validator: Validators::PassengerFormValidator.new)
+
+      transaction { AggregateRoot.new(uuid).create_passenger(params: form.attributes) }
     end
 
-    def self.paid(uuid:)
-      ActiveRecord::Base.transaction do
-        AggregateRoot.new(uuid).paid
-      end
+    def paid(uuid:)
+      transaction { AggregateRoot.new(uuid).paid }
     end
 
     # def reserve(uuid:, params:)

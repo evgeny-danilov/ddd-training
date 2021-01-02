@@ -8,12 +8,12 @@ class SeatReservationsController < ApplicationController
 
   # GET /new
   def new
-    @resource = SeatReservation::CommandHandler.new_resource(uuid: SecureRandom.uuid)
+    @resource = SeatReservation::CommandHandler.new.new_resource(uuid: SecureRandom.uuid)
   end
 
   # POST /reserve
   def reserve
-    SeatReservation::CommandHandler.reserve(uuid: resource_id, params: seat_params)
+    SeatReservation::CommandHandler.new.reserve(uuid: resource_id, params: seat_params)
 
     redirect_to user_input_seat_reservation_url(reservation_id: resource_id)
   end
@@ -25,7 +25,7 @@ class SeatReservationsController < ApplicationController
 
   # POST /create_passenger
   def create_passenger
-    SeatReservation::CommandHandler.create_passenger(uuid: resource_id, params: passenger_params)
+    SeatReservation::CommandHandler.new.create_passenger(uuid: resource_id, params: passenger_params)
 
     redirect_to payment_confirm_seat_reservation_url(reservation_id: resource_id)
   end
@@ -37,7 +37,7 @@ class SeatReservationsController < ApplicationController
 
   # POST /payment_done
   def payment_done
-    SeatReservation::CommandHandler.paid(uuid: resource_id)
+    SeatReservation::CommandHandler.new.paid(uuid: resource_id)
 
     redirect_to congratulate_seat_reservation_url(reservation_id: resource_id)
   end
@@ -50,7 +50,7 @@ class SeatReservationsController < ApplicationController
   private
 
   def load_resource
-    @resource = SeatReservation::CommandHandler.load_resource(uuid: resource_id)
+    @resource = SeatReservation::CommandHandler.new.load_resource(uuid: resource_id)
   end
 
   def resource_id

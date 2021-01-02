@@ -25,10 +25,15 @@ Practice DDD technique:
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
 
 ## TODO
+- check if form struct validations works good on a high level
+- probably, get rid of complex Event classes (or make some experiments in GDPR) 
+- implement `FlightIsNotAvailable` validation
 - revise passing params through `broadcast` method (make it in more explicit way)
 - dry `attributes` / `forms` / `event_repositories`
-- adjust the behaviour when user enter incorrect passenger data
+- adjust the behaviour when user enter incorrect passenger data through the UI
 - add factories for specs
+- make `assert` method in `command_handler` as private
+- dry `stream_name` in aggregate_root & event_repository
 
 ## IDEAS FOR FURTHER IMPROVEMENTS
 - notify passengers if flight cancelled

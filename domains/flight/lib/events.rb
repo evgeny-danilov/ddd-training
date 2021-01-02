@@ -4,8 +4,7 @@ module Flight
   module Events
     class Scheduled < RailsEventStore::Event
       def self.strict(data)
-        params = Attributes::FlightAttributes.new(params: data[:params]).call
-        new(data: { params: params, stream_id: data[:stream_id] })
+        new(data: { params: data[:params], stream_id: data[:stream_id] })
       end
     end
 

@@ -6,7 +6,7 @@ RSpec.describe Route::CommandHandler do
   let(:route_table) { Route::ReadModel::RouteReadModel::Table }
 
   describe '.create' do
-    subject { described_class.create(params: params) }
+    subject { described_class.new.create(params: params) }
 
     let(:params) do
       {

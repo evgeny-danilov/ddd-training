@@ -2,19 +2,18 @@
 
 module Route
   class CommandHandler
+    include Core::CommandHandler::Helpers
+
     InvalidParameters = Class.new(StandardError)
 
-    class << self
-      def create(params:)
-        ActiveRecord::Base.transaction do
-          route = ReadModel::RouteReadModel.new.build(
-            Attributes::RouteAttributes.new(object: route, params: params).call
-          )
-          Command.save(route)
-        end
-      rescue Dry::Struct::Error => e
-        raise InvalidParameters, e
-      end
+    def create(params:)
+      form = Forms::RouteForm.new(params)
+      assert(form, validator: Validators::RouteFormValidator.new)
+      route = ReadModel::RouteReadModel.new.build(form.attributes)
+
+      transaction { Command.save(route) }
+    rescue Dry::Struct::Error => e
+      raise InvalidParameters, e
     end
   end
 end

@@ -3,10 +3,14 @@
 module Core
   module Forms
     class Error < StandardError
-      def initialize(errors:, object:)
+      def initialize(errors:, object: nil)
         @errors = errors
         @object = object
         super('Invalid attributes')
+      end
+
+      def full_messages
+        errors.messages.map(&:to_h)
       end
 
       def object_with_errors
