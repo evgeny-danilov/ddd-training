@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.1'
 
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
-gem 'rails_event_store'
+gem 'rails_event_store', '1.3.0'
 
 gem 'haml-rails', '~> 2.0'
 gem 'puma', '~> 4.1'
