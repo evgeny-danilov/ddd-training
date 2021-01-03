@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.1'
 
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
-gem 'rails_event_store', '1.3.0'
+gem 'rails_event_store', '2.0.0'
 
 gem 'haml-rails', '~> 2.0'
 gem 'puma', '~> 4.1'
@@ -22,16 +22,12 @@ gem 'dry-struct'
 gem 'dry-types'
 gem 'dry-validation'
 
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
-
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 4.0.1'
-
   gem 'mutant-rspec'
 end
 
@@ -44,11 +40,8 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '>= 2.15'
   gem 'rails-controller-testing'
-  gem 'rails_event_store-rspec'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'ruby_event_store-rspec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
