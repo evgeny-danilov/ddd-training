@@ -12,8 +12,6 @@ module Route
       route = ReadModel::RouteReadModel.new.build(form.attributes)
 
       transaction { Command.save(route) }
-    rescue Dry::Struct::Error => e
-      raise InvalidParameters, e
     end
   end
 end

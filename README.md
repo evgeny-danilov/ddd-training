@@ -23,9 +23,11 @@ Practice DDD technique:
 - gem **rails_event_store** (https://railseventstore.org/)
 - **dry.rb** libraries (https://dry-rb.org/)
 - **SecureRandom.uuid** as a generator of unique ids for reservations. 
+- gem **mutant** for mutation testing (https://github.com/mbj/mutant). Example for usage: 
+  `bundle exec mutant run --include domains -r ./config/environment --use rspec SeatReservation::CommandHandler`
 
 ## TODO
-- check if form struct validations works good on a high level
+- try to keep events in separate tables (one per domain, for ex)
 - probably, get rid of complex Event classes (or make some experiments in GDPR) 
 - implement `FlightIsNotAvailable` validation
 - revise passing params through `broadcast` method (make it in more explicit way)
@@ -39,3 +41,4 @@ Practice DDD technique:
 - notify passengers if flight cancelled
 - add auto-expiration of unpaid reservations
 - generate a report for a paid reservation
+- extend parameters for AdminMailer (see `domains/notification/lib/read_model/subscribers.rb`)

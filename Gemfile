@@ -12,8 +12,6 @@ gem 'haml-rails', '~> 2.0'
 gem 'puma', '~> 4.1'
 gem 'sass-rails', '>= 6'
 gem 'sqlite3', '~> 1.4'
-# gem 'webpacker', '~> 4.0'
-# gem 'jbuilder', '~> 2.7'
 gem 'awesome_print'
 gem 'bootstrap', '~> 5.0.0.alpha1'
 gem 'jquery-rails'
@@ -33,6 +31,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 4.0.1'
+
+  gem 'mutant-rspec'
 end
 
 group :development do

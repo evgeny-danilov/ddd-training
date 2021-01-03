@@ -25,11 +25,27 @@ RSpec.describe Route::CommandHandler do
       )
     end
 
-    context 'when :name parameter is invalid' do
-      let(:params) { { name: 1, airline: 'QatarAirways' } }
+    context 'when :name parameter is missing' do
+      let(:params) { { airline: 'QatarAirways' } }
 
       it 'does not create a route' do
-        expect { subject }.to raise_error(Route::CommandHandler::InvalidParameters)
+        expect { subject }.to raise_error(Dry::Struct::Error, /:name is missing/)
+        expect(route_table.find_by(name: params[:name])).to be_nil
+      end
+    end
+
+    context 'when :name parameter is invalid' do
+      let(:params) do
+        {
+          name: '',
+          airline: 'QatarAirways',
+          departure_at: Time.parse('12:05PM'),
+          arrival_at: Time.parse('14:37PM')
+        }
+      end
+
+      it 'does not create a route' do
+        expect { subject }.to raise_error(Core::Forms::Error, 'Invalid attributes')
         expect(route_table.find_by(name: params[:name])).to be_nil
       end
     end
