@@ -16,14 +16,14 @@ RSpec.describe SeatReservation::AggregateRoot do
       .in_stream(event_stream)
   end
 
-  context '#reserve' do
-    subject { described_class.new(id).reserve(params: { number: seat_number }) }
+  context '#create' do
+    subject { described_class.new(id).create(params: { number: seat_number }) }
 
     it 'publishes the Reserved event' do
-      expect { subject }.to publish_events(SeatReservation::Events::Reserved)
+      expect { subject }.to publish_events(SeatReservation::Events::Created)
     end
 
-    context 'when seat has already reserved by other passenger' do
+    context 'when seat has already created by other passenger' do
       before { seat_reservations_table.create!(number: seat_number) }
 
       it 'raises an error' do
@@ -32,24 +32,24 @@ RSpec.describe SeatReservation::AggregateRoot do
     end
   end
 
-  context '#create_passenger' do
-    subject { described_class.new(id).create_passenger(params: passenger_params) }
+  context '#add_passenger' do
+    subject { described_class.new(id).add_passenger(params: passenger_params) }
 
     let(:passenger_params) { { first_name: 'Gold', last_name: 'Man' } }
 
-    context 'when seat has not been reserved' do
+    context 'when seat has not been created' do
       it 'raises an error' do
         expect { subject }.to raise_error(Core::AggregateRoot::InvalidTransactionError)
       end
     end
 
-    context 'when seat has been reserved by guest' do
+    context 'when seat has been created by guest' do
       before do
-        described_class.new(id).reserve(params: { number: seat_number })
+        described_class.new(id).create(params: { number: seat_number })
       end
 
       it 'publishes events' do
-        expect { subject }.to publish_events(SeatReservation::Events::PassengerCreated)
+        expect { subject }.to publish_events(SeatReservation::Events::PassengerAdded)
       end
 
       it 'creates a passenger' do
@@ -57,7 +57,7 @@ RSpec.describe SeatReservation::AggregateRoot do
       end
 
       it 'notify an admin' do
-        expect(AdminMailer).to receive(:passenger_created)
+        expect(AdminMailer).to receive(:passenger_added)
           .with(a_hash_including(stream_id: id, params: {
                                    first_name: passenger_params[:first_name],
                                    last_name: passenger_params[:last_name]

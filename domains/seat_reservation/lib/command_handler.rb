@@ -12,36 +12,36 @@ module SeatReservation
       AggregateRoot.new(uuid).fetch
     end
 
-    def reserve(uuid:, params:)
+    def create(uuid:, params:)
       form = Forms::SeatReservationForm.new(params)
       assert(form, validator: Validators::SeatReservationFormValidator.new)
 
-      transaction { AggregateRoot.new(uuid).reserve(params: form.attributes) }
+      transaction { AggregateRoot.new(uuid).create(params: form.attributes) }
     end
 
-    def create_passenger(uuid:, params:)
+    def add_passenger(uuid:, params:)
       form = Forms::PassengerForm.new(params)
       assert(form, validator: Validators::PassengerFormValidator.new)
 
-      transaction { AggregateRoot.new(uuid).create_passenger(params: form.attributes) }
+      transaction { AggregateRoot.new(uuid).add_passenger(params: form.attributes) }
     end
 
     def paid(uuid:)
       transaction { AggregateRoot.new(uuid).paid }
     end
 
-    # def reserve(uuid:, params:)
+    # def create(uuid:, params:)
     #  ActiveRecord::Base.transaction do
     #    EventRepository.new.with_id(uuid) do |resource|
-    #      resource.reserve(params: params)
+    #      resource.create(params: params)
     #    end
     #  end
     # end
     #
-    # def create_passenger(uuid:, params:)
+    # def add_passenger(uuid:, params:)
     #  ActiveRecord::Base.transaction do
     #    EventRepository.new.with_id(uuid) do |resource|
-    #      resource.create_passenger(params: params)
+    #      resource.add_passenger(params: params)
     #    end
     #  end
     # end

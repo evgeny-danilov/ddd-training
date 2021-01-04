@@ -17,8 +17,8 @@ RSpec.describe SeatReservation::EventRepository do
   context 'storing event to the stream' do
     subject { store_event(event_name) }
 
-    context '#reserve' do
-      let(:event_name) { :reserve }
+    context '#create' do
+      let(:event_name) { :create }
 
       it 'creates a new event' do
         expect { subject }
@@ -34,11 +34,11 @@ RSpec.describe SeatReservation::EventRepository do
       expect(subject).to have_attributes(state: :initialized)
     end
 
-    context 'when seat was reserved' do
-      before { store_event(:reserve) }
+    context 'when seat was created' do
+      before { store_event(:create) }
 
       it 'loads the existing SeatReservation object' do
-        expect(subject).to have_attributes(state: :reserved)
+        expect(subject).to have_attributes(state: :created)
       end
     end
   end

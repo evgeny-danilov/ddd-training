@@ -5,16 +5,16 @@ module Notification
     class Subscribers
       def call(event)
         case event
-        when SeatReservation::Events::PassengerCreated
-          passenger_created(event.data)
+        when SeatReservation::Events::PassengerAdded
+          passenger_added(event.data)
         end
       end
 
       private
 
-      def passenger_created(payload)
+      def passenger_added(payload)
         # TODO: Find Flight No and pass it to mailer
-        AdminMailer.passenger_created(payload).deliver_later
+        AdminMailer.passenger_added(payload).deliver_later
       end
     end
   end

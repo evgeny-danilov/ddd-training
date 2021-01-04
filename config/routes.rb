@@ -8,9 +8,9 @@ Rails.application.routes.draw do
   resource :seat_reservation do
     get :index
     get :new
-    post :reserve
+    post :create
     get :user_input
-    post :create_passenger
+    post :add_passenger
     get :payment_confirm
     post :payment_done
     get :congratulate

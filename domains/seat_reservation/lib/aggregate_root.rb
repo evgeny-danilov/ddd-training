@@ -18,38 +18,38 @@ module SeatReservation
       EventRepository.new.fetch(id)
     end
 
-    def reserve(params:)
+    def create(params:)
       raise InvalidTransactionError unless resource.state == :initialized
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(params[:number])
 
       # raise FlightIsNotAvailable unless Flight::ReadModel::FlightReadModel.new.scheduled?(params[:flight_uuid])
 
-      broadcast(Events::Reserved, {
+      broadcast(Events::Created, {
                   params: params,
                   expired_at: Time.now + 3.hour
                 })
     end
 
-    def create_passenger(params:)
-      raise InvalidTransactionError unless resource.state == :reserved
+    def add_passenger(params:)
+      raise InvalidTransactionError unless resource.state == :created
 
-      broadcast(Events::PassengerCreated, {
+      broadcast(Events::PassengerAdded, {
                   params: params
                 })
     end
 
     def paid
-      raise InvalidTransactionError unless resource.state == :passenger_created
+      raise InvalidTransactionError unless resource.state == :passenger_added
 
       broadcast(Events::Paid, {})
     end
 
-    on Events::Reserved do |_event|
-      @state = :reserved
+    on Events::Created do |_event|
+      @state = :created
     end
 
-    on Events::PassengerCreated do |_event|
-      @state = :passenger_created
+    on Events::PassengerAdded do |_event|
+      @state = :passenger_added
     end
 
     on Events::Paid do |_event|

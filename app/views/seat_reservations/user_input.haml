@@ -1,7 +1,7 @@
 %h1 Enter you personal data
 
 .container
-  = simple_form_for :passenger, url: create_passenger_seat_reservation_url(reservation_id: @resource.id) do |f|
+  = simple_form_for :passenger, url: add_passenger_seat_reservation_url(reservation_id: @resource.id) do |f|
     = f.error_notification
     
     = f.input :first_name

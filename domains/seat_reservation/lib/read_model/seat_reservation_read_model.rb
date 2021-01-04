@@ -9,7 +9,7 @@ module SeatReservation
 
       def call(event)
         case event
-        when ::SeatReservation::Events::Reserved
+        when ::SeatReservation::Events::Created
           create_seat_reservation_record(event.data[:params])
         end
       end

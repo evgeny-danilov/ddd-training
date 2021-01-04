@@ -9,8 +9,8 @@ module SeatReservation
 
       def call(event)
         case event
-        when ::SeatReservation::Events::PassengerCreated
-          create_passenger_record(event.data[:params])
+        when ::SeatReservation::Events::PassengerAdded
+          add_passenger_record(event.data[:params])
         end
       end
 
@@ -24,7 +24,7 @@ module SeatReservation
 
       private
 
-      def create_passenger_record(params)
+      def add_passenger_record(params)
         Table.create!(params)
       end
     end

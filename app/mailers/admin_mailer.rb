@@ -4,7 +4,7 @@ class AdminMailer < ApplicationMailer
   default from: 'admin@example.com'
   layout 'mailer'
 
-  def passenger_created(_payload)
+  def passenger_added(_payload)
     raise NotImplemented
   end
 end

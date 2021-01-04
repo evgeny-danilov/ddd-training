@@ -14,26 +14,26 @@ RSpec.describe 'Seat Reservation', type: :request do
     end
   end
 
-  context 'POST #reserve' do
+  context 'POST #create' do
     let(:params) { { reservation_id: reservation_id, seat: seat_params } }
 
     it 'redirects to user_input page' do
-      post '/seat_reservation/reserve', params: params
+      post '/seat_reservation', params: params
       expect(response).to redirect_to(user_input_seat_reservation_url(reservation_id: reservation_id))
     end
 
     context 'when seat has been reserved' do
-      before { post '/seat_reservation/reserve', params: params }
+      before { post '/seat_reservation', params: params }
 
       it 'redirects to user_input page' do
-        post '/seat_reservation/reserve', params: params
+        post '/seat_reservation', params: params
         expect(response).not_to redirect_to(user_input_seat_reservation_url(reservation_id: reservation_id))
       end
     end
   end
 
   context 'when seat has reserved' do
-    before { aggregate_root.reserve(params: seat_params) }
+    before { aggregate_root.create(params: seat_params) }
 
     context 'GET #user_input' do
       let(:params) { { reservation_id: reservation_id } }
@@ -44,12 +44,12 @@ RSpec.describe 'Seat Reservation', type: :request do
       end
     end
 
-    context 'POST #create_passenger' do
+    context 'POST #add_passenger' do
       let(:params) { { reservation_id: reservation_id, passenger: passenger_attributes } }
       let(:passenger_attributes) { { first_name: 'Gold', last_name: 'Man' } }
 
       it 'redirects to payment confirmation page' do
-        post '/seat_reservation/create_passenger', params: params
+        post '/seat_reservation/add_passenger', params: params
         expect(response).to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
       end
 
@@ -57,7 +57,7 @@ RSpec.describe 'Seat Reservation', type: :request do
         let(:passenger_attributes) { { first_name: 'Gold', last_name: '' } }
 
         it 'render user_input page' do
-          post '/seat_reservation/create_passenger', params: params
+          post '/seat_reservation/add_passenger', params: params
           expect(response).not_to redirect_to payment_confirm_seat_reservation_url(reservation_id: reservation_id)
         end
       end
