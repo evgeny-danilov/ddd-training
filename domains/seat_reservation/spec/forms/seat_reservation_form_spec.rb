@@ -6,7 +6,7 @@ RSpec.describe SeatReservation::Forms::SeatReservationForm do
   subject { described_class.new(params) }
 
   context 'with valid params' do
-    let(:params) { { number: '1' } }
+    let(:params) { { flight_uuid: '12345', number: '1' } }
 
     it 'returns form object' do
       expect(subject).to have_attributes(number: 1)
@@ -14,7 +14,7 @@ RSpec.describe SeatReservation::Forms::SeatReservationForm do
   end
 
   context 'with invalid params' do
-    let(:params) { { number: 'invalid' } }
+    let(:params) { { flight_uuid: '12345', number: 'invalid' } }
 
     it 'returns form object' do
       expect { subject }.to raise_error(Dry::Struct::Error)

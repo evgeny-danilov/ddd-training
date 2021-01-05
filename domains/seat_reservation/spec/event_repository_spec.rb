@@ -14,6 +14,10 @@ RSpec.describe SeatReservation::EventRepository do
     end
   end
 
+  before do
+    allow(Flight::ReadModel::FlightReadModel).to receive(:new).and_return(double(scheduled?: true))
+  end
+
   context 'storing event to the stream' do
     subject { store_event(event_name) }
 

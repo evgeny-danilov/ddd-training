@@ -4,8 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Seat Reservation', type: :request do
   let(:reservation_id) { 123 }
-  let(:seat_params) {  { number: 32 } }
+  let(:seat_params) {  { flight_uuid: '12345', number: 32 } }
   let(:aggregate_root) { SeatReservation::AggregateRoot.new(reservation_id) }
+
+  before do
+    route = Route::ReadModel::RouteReadModel::Table.create(name: '1', airline: '1', departure_at: Date.today, arrival_at: Date.today)
+    Flight::ReadModel::FlightReadModel::Table.create(uuid: seat_params[:flight_uuid], route_id: route.id, status: 'scheduled')
+  end
 
   context 'GET #new' do
     it 'shows new page' do

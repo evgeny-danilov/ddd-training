@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe SeatReservation::AggregateRoot do
   let(:id) { 123 }
   let(:seat_number) { 32 }
+  let(:flight_uuid) { '12345' }
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
   let(:passengers_table) { SeatReservation::ReadModel::PassengerReadModel::Table }
@@ -16,8 +17,12 @@ RSpec.describe SeatReservation::AggregateRoot do
       .in_stream(event_stream)
   end
 
+  before do
+    allow(Flight::ReadModel::FlightReadModel).to receive(:new).and_return(double(scheduled?: true))
+  end
+
   context '#create' do
-    subject { described_class.new(id).create(params: { number: seat_number }) }
+    subject { described_class.new(id).create(params: { flight_uuid: flight_uuid, number: seat_number }) }
 
     it 'publishes the Reserved event' do
       expect { subject }.to publish_events(SeatReservation::Events::Created)
@@ -45,7 +50,7 @@ RSpec.describe SeatReservation::AggregateRoot do
 
     context 'when seat has been created by guest' do
       before do
-        described_class.new(id).create(params: { number: seat_number })
+        described_class.new(id).create(params: { flight_uuid: flight_uuid, number: seat_number })
       end
 
       it 'publishes events' do

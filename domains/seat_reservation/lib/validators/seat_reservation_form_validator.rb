@@ -5,6 +5,7 @@ module SeatReservation
     class SeatReservationFormValidator < Dry::Validation::Contract
       params do
         required(:number).filled(:integer)
+        required(:flight_uuid).filled(:string)
       end
     end
   end

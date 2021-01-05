@@ -8,6 +8,7 @@ module SeatReservation
 
     class SeatReservationForm < Dry::Struct
       attribute :number, Types::Coercible::Integer
+      attribute :flight_uuid, Types::Coercible::String
     end
   end
 end

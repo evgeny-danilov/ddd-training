@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_03_155835) do
+ActiveRecord::Schema.define(version: 2021_01_05_000204) do
 
   create_table "event_store_events", force: :cascade do |t|
     t.string "event_id", limit: 36, null: false
@@ -42,7 +42,9 @@ ActiveRecord::Schema.define(version: 2021_01_03_155835) do
     t.datetime "arrival_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "status"
     t.index ["route_id"], name: "index_flights_on_route_id"
+    t.index ["status"], name: "index_flights_on_status"
   end
 
   create_table "routes", force: :cascade do |t|
@@ -67,6 +69,8 @@ ActiveRecord::Schema.define(version: 2021_01_03_155835) do
     t.integer "number"
     t.string "flight_no"
     t.string "event_id"
+    t.string "flight_uuid"
+    t.index ["flight_uuid"], name: "index_seat_reservations_on_flight_uuid"
   end
 
   add_foreign_key "flights", "routes"
