@@ -32,7 +32,6 @@ Practice DDD technique:
 - revise passing params through `broadcast` method (make it in more explicit way)
 - dry `attributes` / `forms` / `event_repositories`
 - adjust the behaviour when user enter incorrect passenger data through the UI
-- add factories for specs
 - dry `stream_name` in aggregate_root & event_repository
 
 ## IDEAS FOR FURTHER IMPROVEMENTS

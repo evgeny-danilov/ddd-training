@@ -142,6 +142,11 @@ GEM
     erubi (1.9.0)
     erubis (2.7.0)
     execjs (2.7.0)
+    factory_bot (5.1.1)
+      activesupport (>= 4.2.0)
+    factory_bot_rails (5.1.1)
+      factory_bot (~> 5.1.0)
+      railties (>= 4.2.0)
     ffi (1.13.1)
     ffi (1.13.1-java)
     ffi (1.13.1-x64-mingw32)
@@ -417,6 +422,7 @@ DEPENDENCIES
   dry-struct
   dry-types
   dry-validation
+  factory_bot_rails
   haml-rails (~> 2.0)
   jquery-rails
   listen (~> 3.2)
