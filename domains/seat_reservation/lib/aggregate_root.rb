@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'events'
+
 module SeatReservation
   class AggregateRoot
     include Core::AggregateRoot

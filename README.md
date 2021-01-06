@@ -27,12 +27,12 @@ Practice DDD technique:
   `bundle exec mutant run --include domains -r ./config/environment --use rspec SeatReservation::CommandHandler`
 
 ## TODO
+- dry `stream_name` in aggregate_root & event_repository
+- dry `attributes` / `forms` / `event_repositories`
 - try to separate read and write models by a few databases
 - probably, get rid of complex Event classes (or make some experiments in GDPR) 
 - revise passing params through `broadcast` method (make it in more explicit way)
-- dry `attributes` / `forms` / `event_repositories`
 - adjust the behaviour when user enter incorrect passenger data through the UI
-- dry `stream_name` in aggregate_root & event_repository
 
 ## IDEAS FOR FURTHER IMPROVEMENTS
 - notify passengers if flight cancelled

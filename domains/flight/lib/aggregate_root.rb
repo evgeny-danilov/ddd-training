@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'events'
+
 module Flight
   class AggregateRoot
     include Core::AggregateRoot
