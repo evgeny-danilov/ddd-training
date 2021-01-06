@@ -20,7 +20,7 @@ RSpec.describe Flight::AggregateRoot do
   def publish_events(*event_classes)
     publish(*event_classes.map(&method(:an_event)))
       .in(RailsEventStore::Client.new)
-      .in_stream("Flight$#{uuid}")
+      .in_stream("Flight^#{uuid}")
   end
 
   context '#schedule' do

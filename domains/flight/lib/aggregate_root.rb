@@ -38,7 +38,7 @@ module Flight
     end
 
     def stream_name
-      "Flight$#{id}"
+      "Flight^#{id}"
     end
 
     private

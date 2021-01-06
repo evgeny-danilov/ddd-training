@@ -58,7 +58,7 @@ module SeatReservation
     end
 
     def stream_name
-      "SeatReservation$#{id}"
+      "SeatReservation^#{id}"
     end
 
     private

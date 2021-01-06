@@ -6,8 +6,6 @@ RSpec.describe SeatReservation::AggregateRoot do
   let(:id) { 123 }
   let(:seat_number) { 32 }
   let(:flight_uuid) { '12345' }
-  let(:event_store) { RailsEventStore::Client.new }
-  let(:event_stream) { "SeatReservation$#{id}" }
   let(:passenger_form_class) { SeatReservation::Forms::PassengerForm }
   let(:seat_reservation_form_class) { SeatReservation::Forms::SeatReservationForm }
   let(:passengers_table) { SeatReservation::ReadModel::PassengerReadModel::Table }
@@ -15,8 +13,8 @@ RSpec.describe SeatReservation::AggregateRoot do
 
   def publish_events(*event_classes)
     publish(*event_classes.map(&method(:an_event)))
-      .in(event_store)
-      .in_stream(event_stream)
+      .in(RailsEventStore::Client.new)
+      .in_stream("SeatReservation^#{id}")
   end
 
   before do
