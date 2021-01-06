@@ -2,11 +2,9 @@
 
 module Route
   module Forms
-    module Types
-      include Dry.Types()
-    end
-
     class RouteForm < Dry::Struct
+      include Core::Form
+
       attribute :name, Types::String
       attribute :airline, Types::String
       attribute :departure_at, Types::Time

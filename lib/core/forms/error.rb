@@ -3,7 +3,7 @@
 module Core
   module Forms
     class Error < StandardError
-      def initialize(errors:, object: nil)
+      def initialize(errors, object: nil)
         @errors = errors
         @object = object
         super('Invalid attributes')

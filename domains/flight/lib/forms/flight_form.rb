@@ -2,11 +2,9 @@
 
 module Flight
   module Forms
-    module Types
-      include Dry.Types()
-    end
-
     class FlightForm < Dry::Struct
+      include Core::Form
+
       attribute :uuid, Types::String
       attribute :route_id, Types::Integer
       # attribute :departure_at,  Types::DateTime

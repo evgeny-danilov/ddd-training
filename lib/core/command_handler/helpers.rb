@@ -8,7 +8,7 @@ module Core
 
       def assert(form, validator:)
         validator.call(form.attributes).tap do |result|
-          raise(Core::Forms::Error, errors: result.errors) if result.failure?
+          raise(Core::Forms::Error, result.errors) if result.failure?
         end
       end
 
