@@ -26,7 +26,7 @@ RSpec.describe Flight::AggregateRoot do
   context '#schedule' do
     subject { described_class.new(uuid).schedule(form: flight_form) }
 
-    it 'publishes the Scheduled event' do
+    it 'publishes the event' do
       expect { subject }.to publish_events(Flight::Events::Scheduled)
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Flight::AggregateRoot do
         described_class.new(uuid).schedule(form: flight_form)
       end
 
-      it 'publishes events' do
+      it 'publishes the event' do
         expect { subject }.to publish_events(Flight::Events::Cancelled)
       end
     end

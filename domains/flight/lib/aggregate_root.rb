@@ -14,7 +14,7 @@ module Flight
     attr_reader :state, :id
 
     def fetch
-      EventRepository.new.fetch(id)
+      event_repository.fetch(id)
     end
 
     def schedule(form:)
@@ -37,12 +37,16 @@ module Flight
       @state = :cancelled
     end
 
+    def stream_name
+      "Flight$#{id}"
+    end
+
     private
 
     def resource
       return @resource if defined?(@resource)
 
-      EventRepository.new.with_id(id) { return @resource = _1 }
+      event_repository.with_id(id) { return @resource = _1 }
     end
 
     def broadcast(event_class, payload)
@@ -50,8 +54,8 @@ module Flight
       event.tap { Publisher.broadcast(event, stream_name) }
     end
 
-    def stream_name
-      "Flight$#{id}"
+    def event_repository
+      EventRepository.new(aggregate_root_class: self.class)
     end
   end
 end

@@ -17,7 +17,7 @@ module SeatReservation
     attr_reader :state, :id
 
     def fetch
-      EventRepository.new.fetch(id)
+      event_repository.fetch(id)
     end
 
     def create(form:)
@@ -57,12 +57,16 @@ module SeatReservation
       @state = :paid
     end
 
+    def stream_name
+      "SeatReservation$#{id}"
+    end
+
     private
 
     def resource
       return @resource if defined?(@resource)
 
-      EventRepository.new.with_id(id) { return @resource = _1 }
+      event_repository.with_id(id) { return @resource = _1 }
     end
 
     def broadcast(event_class, payload)
@@ -70,8 +74,8 @@ module SeatReservation
       event.tap { Publisher.broadcast(event, stream_name) }
     end
 
-    def stream_name
-      "SeatReservation$#{id}"
+    def event_repository
+      EventRepository.new(aggregate_root_class: self.class)
     end
   end
 end
