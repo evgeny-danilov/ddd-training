@@ -16,10 +16,6 @@ module SeatReservation
 
     attr_reader :state, :id
 
-    def fetch
-      event_repository.fetch(id)
-    end
-
     def create(form:)
       raise InvalidTransactionError unless resource.state == :initialized
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(form.number)
@@ -34,9 +30,7 @@ module SeatReservation
     def add_passenger(form:)
       raise InvalidTransactionError unless resource.state == :created
 
-      broadcast(Events::PassengerAdded, {
-                  params: form.attributes
-                })
+      broadcast(Events::PassengerAdded, { params: form.attributes })
     end
 
     def paid
@@ -59,23 +53,6 @@ module SeatReservation
 
     def stream_name
       "SeatReservation^#{id}"
-    end
-
-    private
-
-    def resource
-      return @resource if defined?(@resource)
-
-      event_repository.with_id(id) { return @resource = _1 }
-    end
-
-    def broadcast(event_class, payload)
-      event = event_class.strict(payload.merge(stream_id: id))
-      event.tap { Publisher.broadcast(event, stream_name) }
-    end
-
-    def event_repository
-      EventRepository.new(aggregate_root_class: self.class)
     end
   end
 end
