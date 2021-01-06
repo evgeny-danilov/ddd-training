@@ -15,10 +15,10 @@ module Flight
       EventRepository.new.fetch(id)
     end
 
-    def schedule(params:)
+    def schedule(form:)
       raise InvalidTransactionError unless resource.state == :initialized
 
-      broadcast(Events::Scheduled, { params: params })
+      broadcast(Events::Scheduled, { params: form.attributes })
     end
 
     def cancel

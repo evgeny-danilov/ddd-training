@@ -8,6 +8,8 @@ RSpec.describe SeatReservation::AggregateRoot do
   let(:flight_uuid) { '12345' }
   let(:event_store) { RailsEventStore::Client.new }
   let(:event_stream) { "SeatReservation$#{id}" }
+  let(:passenger_form_class) { SeatReservation::Forms::PassengerForm }
+  let(:seat_reservation_form_class) { SeatReservation::Forms::SeatReservationForm }
   let(:passengers_table) { SeatReservation::ReadModel::PassengerReadModel::Table }
   let(:seat_reservations_table) { SeatReservation::ReadModel::SeatReservationReadModel::Table }
 
@@ -22,7 +24,9 @@ RSpec.describe SeatReservation::AggregateRoot do
   end
 
   context '#create' do
-    subject { described_class.new(id).create(params: { flight_uuid: flight_uuid, number: seat_number }) }
+    subject { described_class.new(id).create(form: form) }
+
+    let(:form) { seat_reservation_form_class.new(flight_uuid: flight_uuid, number: seat_number) }
 
     it 'publishes the Reserved event' do
       expect { subject }.to publish_events(SeatReservation::Events::Created)
@@ -38,8 +42,9 @@ RSpec.describe SeatReservation::AggregateRoot do
   end
 
   context '#add_passenger' do
-    subject { described_class.new(id).add_passenger(params: passenger_params) }
+    subject { described_class.new(id).add_passenger(form: form) }
 
+    let(:form) { passenger_form_class.new(passenger_params) }
     let(:passenger_params) { { first_name: 'Gold', last_name: 'Man' } }
 
     context 'when seat has not been created' do
@@ -50,7 +55,8 @@ RSpec.describe SeatReservation::AggregateRoot do
 
     context 'when seat has been created by guest' do
       before do
-        described_class.new(id).create(params: { flight_uuid: flight_uuid, number: seat_number })
+        seat_reservation_form = seat_reservation_form_class.new(flight_uuid: flight_uuid, number: seat_number)
+        described_class.new(id).create(form: seat_reservation_form)
       end
 
       it 'publishes events' do

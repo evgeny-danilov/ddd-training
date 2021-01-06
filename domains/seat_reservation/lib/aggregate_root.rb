@@ -18,22 +18,22 @@ module SeatReservation
       EventRepository.new.fetch(id)
     end
 
-    def create(params:)
+    def create(form:)
       raise InvalidTransactionError unless resource.state == :initialized
-      raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(params[:number])
-      raise FlightIsNotAvailable unless Flight::ReadModel::FlightReadModel.new.scheduled?(params[:flight_uuid])
+      raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(form.number)
+      raise FlightIsNotAvailable unless Flight::ReadModel::FlightReadModel.new.scheduled?(form.flight_uuid)
 
       broadcast(Events::Created, {
-                  params: params,
+                  params: form.attributes,
                   expired_at: Time.now + 3.hour
                 })
     end
 
-    def add_passenger(params:)
+    def add_passenger(form:)
       raise InvalidTransactionError unless resource.state == :created
 
       broadcast(Events::PassengerAdded, {
-                  params: params
+                  params: form.attributes
                 })
     end
 

@@ -19,8 +19,9 @@ RSpec.describe Flight::EventRepository do
   end
 
   def store_event(event_name)
+    flight_form = Flight::Forms::FlightForm.new(flight_params)
     described_class.new.with_id(uuid) do |item|
-      item.public_send(event_name, params: flight_params)
+      item.public_send(event_name, form: flight_form)
     end
   end
 

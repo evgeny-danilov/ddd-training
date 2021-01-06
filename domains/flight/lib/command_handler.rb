@@ -2,7 +2,7 @@
 
 module Flight
   class CommandHandler
-    include Core::CommandHandler
+    include Core::CommandHandler::Helpers
 
     def new_resource(uuid:)
       AggregateRoot.new(uuid)
@@ -16,7 +16,7 @@ module Flight
       form = Forms::FlightForm.new(params)
       assert(form, validator: Validators::FlightFormValidator.new)
 
-      transaction { AggregateRoot.new(uuid).schedule(params: form.attributes) }
+      transaction { AggregateRoot.new(uuid).schedule(form: form) }
     end
 
     def cancel(uuid:)

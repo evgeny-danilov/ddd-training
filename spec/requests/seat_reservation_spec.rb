@@ -38,7 +38,9 @@ RSpec.describe 'Seat Reservation', type: :request do
   end
 
   context 'when seat has reserved' do
-    before { aggregate_root.create(params: seat_params) }
+    before { aggregate_root.create(form: form) }
+
+    let(:form) { SeatReservation::Forms::SeatReservationForm.new(seat_params) }
 
     context 'GET #user_input' do
       let(:params) { { reservation_id: reservation_id } }

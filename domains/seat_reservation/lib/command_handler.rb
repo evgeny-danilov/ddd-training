@@ -16,14 +16,14 @@ module SeatReservation
       form = Forms::SeatReservationForm.new(params)
       assert(form, validator: Validators::SeatReservationFormValidator.new)
 
-      transaction { AggregateRoot.new(uuid).create(params: form.attributes) }
+      transaction { AggregateRoot.new(uuid).create(form: form) }
     end
 
     def add_passenger(uuid:, params:)
       form = Forms::PassengerForm.new(params)
       assert(form, validator: Validators::PassengerFormValidator.new)
 
-      transaction { AggregateRoot.new(uuid).add_passenger(params: form.attributes) }
+      transaction { AggregateRoot.new(uuid).add_passenger(form: form) }
     end
 
     def paid(uuid:)

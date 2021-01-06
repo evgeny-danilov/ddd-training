@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe Flight::AggregateRoot do
   let(:flights_table) { Flight::ReadModel::FlightReadModel::Table }
   let(:routes_table) { Route::ReadModel::RouteReadModel::Table }
-  let(:uuid) { '12345' }
 
+  let(:uuid) { '12345' }
   let(:route) do
     routes_table.create(
       name: 'QT-123',
@@ -15,6 +15,7 @@ RSpec.describe Flight::AggregateRoot do
       arrival_at: Date.current
     )
   end
+  let(:flight_form) { Flight::Forms::FlightForm.new(uuid: uuid, route_id: route.id) }
 
   def publish_events(*event_classes)
     publish(*event_classes.map(&method(:an_event)))
@@ -23,7 +24,7 @@ RSpec.describe Flight::AggregateRoot do
   end
 
   context '#schedule' do
-    subject { described_class.new(uuid).schedule(params: { uuid: uuid, route_id: route.id }) }
+    subject { described_class.new(uuid).schedule(form: flight_form) }
 
     it 'publishes the Scheduled event' do
       expect { subject }.to publish_events(Flight::Events::Scheduled)
@@ -34,7 +35,7 @@ RSpec.describe Flight::AggregateRoot do
     end
 
     context 'when flight has already scheduled' do
-      before { described_class.new(uuid).schedule(params: { uuid: uuid, route_id: route.id }) }
+      before { described_class.new(uuid).schedule(form: flight_form) }
 
       it 'raises an error' do
         expect { subject }.to raise_error(Flight::AggregateRoot::InvalidTransactionError)
@@ -55,7 +56,7 @@ RSpec.describe Flight::AggregateRoot do
 
     context 'when has been scheduled' do
       before do
-        described_class.new(uuid).schedule(params: flight_params)
+        described_class.new(uuid).schedule(form: flight_form)
       end
 
       it 'publishes events' do
