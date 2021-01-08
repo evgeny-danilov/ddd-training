@@ -8,14 +8,14 @@ ruby '2.7.1'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 gem 'rails_event_store', '2.0.0'
 
-gem 'haml-rails', '~> 2.0'
-gem 'puma', '~> 4.1'
-gem 'sass-rails', '>= 6'
-gem 'sqlite3', '~> 1.4'
 gem 'awesome_print'
 gem 'bootstrap', '~> 5.0.0.alpha1'
+gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails'
+gem 'puma', '~> 4.1'
+gem 'sass-rails', '>= 6'
 gem 'simple_form'
+gem 'sqlite3', '~> 1.4'
 
 gem 'dry-monads'
 gem 'dry-struct'
@@ -27,9 +27,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'rspec-rails', '~> 4.0.1'
   gem 'factory_bot_rails'
   gem 'mutant-rspec'
+  gem 'rspec-rails', '~> 4.0.1'
 end
 
 group :development do

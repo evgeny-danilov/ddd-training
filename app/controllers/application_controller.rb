@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   def form_validation_error(exception)
     redirect_back_after_error(
-      #full_message: exception.object_with_errors.errors.full_messages.join(', ')
+      # full_message: exception.object_with_errors.errors.full_messages.join(', ')
       full_message: exception.full_messages.to_s # TODO: make it user-friendly
     )
 

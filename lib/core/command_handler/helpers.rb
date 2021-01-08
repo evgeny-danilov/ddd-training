@@ -3,7 +3,6 @@
 module Core
   module CommandHandler
     module Helpers
-
       private
 
       def assert(form, validator:)
@@ -15,7 +14,6 @@ module Core
       def transaction(&block)
         ActiveRecord::Base.transaction(&block)
       end
-
     end
   end
 end

@@ -20,7 +20,7 @@ module Flight
     end
 
     def cancel(uuid:)
-      transaction  { AggregateRoot.new(uuid).cancel }
+      transaction { AggregateRoot.new(uuid).cancel }
     end
   end
 end
