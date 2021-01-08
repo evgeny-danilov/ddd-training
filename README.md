@@ -6,7 +6,7 @@ Test application, appeared after the **Arkency DDD training** (https://www.youtu
 Practice DDD technique:
 - event-driven design
 - event-source design
-- boundry contexts
+- boundary contexts
 - aggregate roots
 - read-models (subscribers)
 
@@ -27,11 +27,12 @@ Practice DDD technique:
   `bundle exec mutant run --include domains -r ./config/environment --use rspec SeatReservation::CommandHandler`
 
 ## TODO
-- try to separate read and write models by a few databases
+- try to split read and write models to a few databases
 - probably, get rid of complex Event classes (or make some experiments in GDPR) 
 - adjust the behaviour when user enter incorrect passenger data through the UI
+- revise the read model approach
 
-## IDEAS FOR FURTHER IMPROVEMENTS
+## IDEAS FOR FURTHER EXPERIMENTS
 - notify passengers if flight cancelled
 - add auto-expiration of unpaid reservations
 - generate a report for a paid reservation
