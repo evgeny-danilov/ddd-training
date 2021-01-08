@@ -9,7 +9,10 @@ RSpec.describe 'Seat Reservation', type: :request do
   let(:aggregate_root) { SeatReservation::AggregateRoot.new(reservation_id) }
 
   before do
-    create(:flight, uuid: flight_uuid, status: 'scheduled')
+    Flight::CommandHandler.new.schedule(
+      uuid: flight_uuid,
+      params: { uuid: flight_uuid, route_id: create(:route).id }
+    )
   end
 
   context 'GET #new' do

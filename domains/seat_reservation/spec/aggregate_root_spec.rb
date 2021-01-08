@@ -18,7 +18,10 @@ RSpec.describe SeatReservation::AggregateRoot do
   end
 
   before do
-    allow(Flight::ReadModel::FlightReadModel).to receive(:new).and_return(double(scheduled?: true))
+    allow(Core::AggregateRoot::EventRepository).to receive(:new).and_call_original
+    allow(Core::AggregateRoot::EventRepository).to receive(:new)
+      .with(aggregate_root_class: Flight::AggregateRoot)
+      .and_return(double(fetch: double(state: :scheduled)))
   end
 
   context '#create' do

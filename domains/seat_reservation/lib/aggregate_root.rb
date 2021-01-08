@@ -19,7 +19,7 @@ module SeatReservation
     def create(form:)
       raise InvalidTransactionError unless resource.state == :initialized
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(form.number)
-      raise FlightIsNotAvailable unless Flight::ReadModel::FlightReadModel.new.scheduled?(form.flight_uuid)
+      raise FlightIsNotAvailable unless flight_active?(flight_uuid: form.flight_uuid)
 
       broadcast(Events::Created, {
                   params: form.attributes,
@@ -53,6 +53,14 @@ module SeatReservation
 
     def stream_name
       "SeatReservation^#{id}"
+    end
+
+    private
+
+    def flight_active?(flight_uuid:)
+      flight_event_repository = Core::AggregateRoot::EventRepository.new(aggregate_root_class: Flight::AggregateRoot)
+
+      flight_event_repository.fetch(flight_uuid).state == :scheduled
     end
   end
 end

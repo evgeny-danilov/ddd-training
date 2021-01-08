@@ -29,7 +29,6 @@ Practice DDD technique:
 ## TODO
 - try to separate read and write models by a few databases
 - probably, get rid of complex Event classes (or make some experiments in GDPR) 
-- revise passing params through `broadcast` method (make it in more explicit way)
 - adjust the behaviour when user enter incorrect passenger data through the UI
 
 ## IDEAS FOR FURTHER IMPROVEMENTS
