@@ -21,6 +21,9 @@ module SeatReservation
       raise SeatHasAlreadyReserved if ReadModel::SeatReservationReadModel.new.already_reserved?(form.number)
       raise FlightIsNotAvailable unless flight_active?(flight_uuid: form.flight_uuid)
 
+      # however, using a read model could be mush cheaper in term of db performance
+      # raise FlightIsNotAvailable if Flight::ReadModel::FlightReadModel.new.scheduled?(form.flight_uuid)
+
       broadcast(Events::Created, {
                   params: form.attributes,
                   expired_at: Time.now + 3.hour

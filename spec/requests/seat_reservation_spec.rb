@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Seat Reservation', type: :request do
   let(:reservation_id) { 123 }
   let(:flight_uuid) { '12345' }
-  let(:seat_params) {  { flight_uuid: flight_uuid, number: 32 } }
-  let(:aggregate_root) { SeatReservation::AggregateRoot.new(reservation_id) }
+  let(:seat_params) { { flight_uuid: flight_uuid, number: 32 } }
+  let(:command_handler) { SeatReservation::CommandHandler.new }
 
   before do
     Flight::CommandHandler.new.schedule(
@@ -41,9 +41,7 @@ RSpec.describe 'Seat Reservation', type: :request do
   end
 
   context 'when seat has reserved' do
-    before { aggregate_root.create(form: form) }
-
-    let(:form) { SeatReservation::Forms::SeatReservationForm.new(seat_params) }
+    before { command_handler.create(uuid: reservation_id, params: seat_params) }
 
     context 'GET #user_input' do
       let(:params) { { reservation_id: reservation_id } }
@@ -56,7 +54,7 @@ RSpec.describe 'Seat Reservation', type: :request do
 
     context 'POST #add_passenger' do
       let(:params) { { reservation_id: reservation_id, passenger: passenger_attributes } }
-      let(:passenger_attributes) { { first_name: 'Gold', last_name: 'Man' } }
+      let(:passenger_attributes) { { first_name: 'Gold', last_name: 'User' } }
 
       it 'redirects to payment confirmation page' do
         post '/seat_reservation/add_passenger', params: params
